@@ -1,0 +1,280 @@
+/* Tracker Styles for Water & Protein */
+
+/* Header styling for tracker apps */
+.water-app ~ .main-header,
+.protein-app ~ .main-header {
+  background: linear-gradient(135deg, var(--water-primary) 0%, var(--protein-primary) 100%);
+}
+
+/* Active state for all tabs */
+.tab-btn.active[data-app="water"] {
+  background: var(--water-primary);
+  color: white;
+}
+
+.tab-btn.active[data-app="protein"] {
+  background: var(--protein-primary);
+  color: white;
+}
+
+/* Button colors */
+.action-btn.water {
+  background: var(--water-primary);
+}
+
+.action-btn.water:hover {
+  background: var(--water-dark);
+}
+
+.action-btn.protein {
+  background: var(--protein-primary);
+}
+
+.action-btn.protein:hover {
+  background: var(--protein-dark);
+}
+
+/* Input focus colors */
+.water-app input[type="number"]:focus {
+  border-color: var(--water-primary);
+}
+
+.protein-app input[type="number"]:focus {
+  border-color: var(--protein-primary);
+}
+
+/* Tab focus colors */
+.water-app button:focus-visible,
+.water-app input:focus-visible {
+  outline-color: var(--water-primary);
+}
+
+.protein-app button:focus-visible,
+.protein-app input:focus-visible {
+  outline-color: var(--protein-primary);
+}
+
+/* Active tab colors */
+.water-app .tab-button.active {
+  color: var(--water-primary);
+}
+
+.protein-app .tab-button.active {
+  color: var(--protein-primary);
+}
+
+/* Progress visualization - FIXED: Standardized for both water and protein */
+.water-app .goal-visual,
+.protein-app .goal-visual {
+  display: flex;
+  justify-content: center;
+  margin: var(--spacing-xl) 0;
+}
+
+.water-app .circular-progress,
+.protein-app .circular-progress {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.water-app .circular-progress svg,
+.protein-app .circular-progress svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.water-app .progress-bg,
+.protein-app .progress-bg {
+  fill: none;
+  stroke: var(--border-color);
+  stroke-width: 5;
+}
+
+.water-app .progress-bar,
+.protein-app .progress-bar {
+  fill: none;
+  stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s ease;
+}
+
+.water-app .progress-bar {
+  stroke: var(--water-primary);
+}
+
+.protein-app .progress-bar {
+  stroke: var(--protein-primary);
+}
+
+.water-app .progress-content,
+.protein-app .progress-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.water-app .progress-content span:first-child,
+.protein-app .progress-content span:first-child {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.water-app .progress-content span:first-child {
+  color: var(--water-primary);
+}
+
+.protein-app .progress-content span:first-child {
+  color: var(--protein-primary);
+}
+
+.water-app .unit,
+.protein-app .unit {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.water-app .progress-text,
+.protein-app .progress-text {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.water-app .progress-text p,
+.protein-app .progress-text p {
+  margin: 0;
+  margin-bottom: var(--spacing-sm);
+}
+
+.water-app .progress-text span,
+.protein-app .progress-text span {
+  font-weight: 700;
+}
+
+.water-app .progress-text span {
+  color: var(--water-primary);
+}
+
+.protein-app .progress-text span {
+  color: var(--protein-primary);
+}
+
+/* Quick add buttons */
+.water-app .quick-add,
+.protein-app .quick-add {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Custom add */
+.water-app .custom-add,
+.protein-app .custom-add {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Analytics tab of the history panel: range dropdown, figures, bar graph */
+.intake-analytics {
+  padding-top: var(--spacing-sm);
+}
+
+.intake-analytics-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-md);
+}
+
+.water-app select.time-period-dropdown:hover,
+.water-app select.time-period-dropdown:focus {
+  border-color: var(--water-primary) !important;
+}
+
+.protein-app select.time-period-dropdown:hover,
+.protein-app select.time-period-dropdown:focus {
+  border-color: var(--protein-primary) !important;
+}
+
+/* The SVG fills this box; renderBarChart() measures it to draw. */
+.intake-chart {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin-top: var(--spacing-sm);
+}
+
+/* Same width as the graph, so labels land under their bars. */
+.intake-chart-labels {
+  width: 100%;
+  margin-top: var(--spacing-xs);
+}
+
+/* Second line of figures ("Goal met on 5 of 7 days") on a row of its own. */
+.chart-summary-line {
+  flex-basis: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .water-app .goal-visual,
+  .protein-app .goal-visual {
+    margin: var(--spacing-lg) 0;
+  }
+
+  .water-app .circular-progress,
+  .protein-app .circular-progress {
+    width: 150px;
+    height: 150px;
+  }
+
+  .water-app .progress-content span:first-child,
+  .protein-app .progress-content span:first-child {
+    font-size: 2rem;
+  }
+  
+  /* FIXED: Simplified responsive adjustments for tabs */
+  .tab-btn {
+    padding: var(--spacing-md) 4px;
+    gap: 4px;
+    font-size: 0.9rem;
+  }
+  
+  .tab-btn .material-icons-round {
+    font-size: 1.3rem;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Additional responsive adjustments for very small screens */
+@media (max-width: 360px) {
+  .tab-btn {
+    padding: var(--spacing-sm) 2px;
+    font-size: 0.8rem;
+    gap: 2px;
+  }
+  
+  /* FIXED: Simplified for Material Icons only */
+  .tab-btn .material-icons-round {
+    font-size: 1.2rem;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .tab-btn span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+}

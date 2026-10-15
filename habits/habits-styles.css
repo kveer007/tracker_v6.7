@@ -1,0 +1,1089 @@
+/* Habits.css - Styles for the Habits tab integrated with Health Tracker */
+
+/* Variables - Adding habits color to main app theme */
+:root {
+  /* Updated habits primary color from green to purple */
+  --habits-primary: #673AB7;
+  --habits-light: #D1C4E9;
+  --habits-dark: #4527A0;
+}
+
+/* Tab button styling - No emoji pseudo-element */
+.tab-btn[data-app="habits"] i {
+  color: var(--text-secondary);
+}
+
+.tab-btn.active[data-app="habits"] {
+  background: var(--habits-primary);
+  color: white;
+}
+
+.tab-btn.active[data-app="habits"] i {
+  color: white;
+}
+
+/* Container adjustments */
+.habits-app {
+  background-color: var(--background);
+  color: var(--text-primary);
+}
+
+/* Make sure main and detail views have proper display */
+#habits-main-view, #habits-detail-view {
+  width: 100%;
+}
+
+#habits-detail-view {
+  display: none;
+}
+
+/* Main view specific styles */
+#habits-container {
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  max-height: calc(100vh - 240px);
+  border-radius: 0;
+}
+
+/* Make the habit app take the full width of container */
+.habits-app .card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.habits-app .card-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 0;
+}
+
+/* Date selector styling for perfect alignment */
+#habits-date-selector {
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+}
+
+/* Align date container exactly with habit grid */
+.date-selector-container {
+  display: flex;
+  width: 100%;
+}
+
+/* Fixed date-display-wrapper to maintain consistent spacing */
+.date-display-wrapper {
+  display: flex;
+  padding: 0;
+  width: 100%;
+  flex-wrap: nowrap; /* Prevent wrapping */
+}
+
+/* Date navigation container with overflow masking */
+.date-navigation {
+  display: flex;
+  align-items: center; 
+  justify-content: flex-start; 
+  padding: 0;
+  width: 35%; /* Same as habit-name-section */
+  position: relative;
+  overflow: visible; /* Changed from hidden to allow buttons to be visible */
+  height: 65px;
+  /* Add z-index to ensure buttons appear above other elements */
+  z-index: 10;
+}
+
+/* Date nav buttons basic styling */
+.date-nav-button {
+  background-color: #3A3A3C;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  position: relative; /* Changed from absolute */
+  margin: 0 4px;
+  z-index: 10;
+}
+
+.date-nav-button:hover {
+  background-color: #555;
+}
+
+/* Back button always visible */
+.date-nav-back {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  z-index: 3; /* Ensure it's always on top */
+}
+
+/* Today button styling */
+.today-button {
+  width: auto;
+  min-width: 60px;
+  padding: 0 8px;
+  border-radius: 14px;
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  opacity: 0; /* Initially hidden */
+  z-index: 2;
+  pointer-events: none; /* Prevent interaction when hidden */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Forward button styling */
+.date-nav-forward {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  opacity: 0; /* Initially hidden */
+  z-index: 1;
+  pointer-events: none; /* Prevent interaction when hidden */
+  visibility: hidden; /* Initially hidden */
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+/* Active state for navigation buttons - slide in */
+.show-navigation .today-button {
+  opacity: 1;
+  transform: none;
+  pointer-events: all; /* Re-enable interaction */
+}
+
+.show-navigation .date-nav-forward:not(.disabled) {
+  opacity: 1;
+  transform: none;
+  pointer-events: all; /* Re-enable interaction */
+  visibility: visible; /* Make it visible */
+}
+
+/* Hide disabled forward button */
+.date-nav-button.date-nav-forward.disabled {
+  opacity: 0 !important; /* Use !important to override any existing styles */
+  pointer-events: none;
+  visibility: hidden; /* This ensures it's completely hidden */
+}
+
+/* Disabled state for forward button */
+.date-nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Make dates container take available space consistently */
+.dates-container {
+  display: flex;
+  flex: 1;
+  padding: 0;
+  margin: 0;
+  width: 65%; /* Same as habit-grid-section */
+}
+
+.date-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.day-name {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.day-number {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Habit item styling for perfect alignment */
+.habit-item {
+  display: flex;
+  height: 60px;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+}
+
+.habit-name-section {
+  width: 35%;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid var(--border-color);
+}
+
+.habit-grid-section {
+  width: 65%;
+  padding: 0;
+  margin: 0;
+}
+
+.habit-item .circle {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--text-secondary);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+.habit-item .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+/* Grid with dates and checkmarks styling */
+.habit-grid {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.habit-day {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border-color);
+  height: 100%;
+  /* No text selection or iOS callout on a long-press. This used to be done
+     by cancelling touchstart in JS, which also stopped the page scrolling
+     when a drag began on a cell. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.habit-day:last-child {
+  border-right: none;
+}
+
+.habit-day svg {
+  width: 20px;
+  height: 20px;
+}
+
+.habit-day.done svg {
+  stroke-width: 3px;
+}
+
+.habit-day.fail svg {
+  stroke: #8E8E93;
+  opacity: 0.8;
+  stroke-width: 2px;
+}
+
+
+/* Drag and Drop Styles */
+.drag-handle {
+  display: none;
+  margin-right: 8px;
+  color: var(--text-secondary);
+  font-size: 18px;
+  cursor: grab;
+}
+
+.rearranging .drag-handle {
+  display: block;
+}
+
+.rearranging .circle {
+  display: none;
+}
+
+.habit-item.dragging {
+  opacity: 0.5;
+}
+
+.habit-item.drag-over {
+  border-top: 3px solid var(--habits-primary);
+}
+
+/* Long-press feedback */
+.habit-day.longpress {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Detail View Styles */
+.habits-detail-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Chart and visualization styles */
+.habits-section {
+  margin: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+}
+
+.habits-section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 0 0 8px 0;
+  margin: 0 0 12px 0;
+  color: var(--habits-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced chart styling */
+.habits-chart-container {
+  background-color: var(--card-bg);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  overflow: hidden;
+}
+
+.habits-chart {
+  height: 180px; /* Increased height */
+  position: relative;
+  margin: var(--spacing-md) 0;
+  padding-bottom: var(--spacing-sm);
+}
+
+.habits-chart-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: var(--spacing-sm);
+  padding-left: 30px;
+  padding-right: 10px;
+}
+
+.habits-chart-point {
+  width: 8px;
+  height: 8px;
+  background-color: var(--habits-primary);
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Improved time period selector styling */
+.time-period-selector {
+  position: relative;
+}
+
+.time-period-dropdown {
+  background-color: var(--card-bg)  !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-sm);
+  padding: 6px 28px 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 110px;
+  height: 32px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.time-period-selector::after {
+  content: '▼';
+  font-size: 10px;
+  color: var(--text-secondary);
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.time-period-dropdown:focus,
+.time-period-dropdown:hover {
+  border-color: var(--habits-primary);
+  background-color: rgba(103, 58, 183, 0.05);
+}
+
+/* Calendar styles */
+.habits-calendar-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  /* One month per swipe. Each month (and the Load More page) is a snap
+     point; the code's own jumps - to the current month on open, to the newest
+     loaded month after Load More - land on snap points too. */
+  scroll-snap-type: x mandatory;
+  padding: var(--spacing-sm) 0;
+  border-radius: var(--radius-md);
+  background-color: var(--card-bg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.habits-calendar-scroll-content {
+  display: flex;
+  padding-bottom: var(--spacing-sm);
+}
+
+/* Each month fills the strip, so exactly one shows at a time. It used to be a
+   fixed 320px (280px on phones), wider or narrower than the strip depending
+   on the screen, which left a cut-off sliver of the neighbouring month on
+   show - and in the narrower workout history panel cut off the month itself. */
+.habits-month-calendar {
+  flex: 0 0 100%;
+  width: 100%;
+  margin-right: var(--spacing-md);
+  scroll-snap-align: start;
+}
+
+.habits-month-calendar:last-child {
+  margin-right: 0;
+}
+
+.habits-month-header {
+  text-align: center;
+  color: var(--text-primary);
+  font-size: 14px;
+  margin-bottom: var(--spacing-sm);
+  font-weight: 500;
+  padding: 4px 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+}
+
+.habits-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background-color: var(--border-color);
+  padding: 1px;
+  border-radius: var(--radius-sm);
+}
+
+.habits-calendar-cell {
+  background-color: var(--card-bg);
+  aspect-ratio: 1/1;
+  padding: 0;
+  text-align: center;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.habits-calendar-cell.day-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+.habits-calendar-cell.active {
+  background-color: var(--habits-primary);
+}
+
+.habits-calendar-cell.editable {
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.habits-calendar-cell.editable:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Future date styling */
+.habits-calendar-cell.future-date {
+  color: var(--text-secondary);
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.habits-calendar-controls {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.habits-small-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color var(--transition-fast);
+}
+
+.habits-small-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.habits-small-button.active {
+  background-color: var(--habits-primary);
+  color: white;
+}
+
+/* Streak styles */
+.habits-streak-bars {
+  margin-top: var(--spacing-md);
+}
+
+.habits-streak-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  background-color: var(--card-bg);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-sm);
+}
+
+.habits-streak-date {
+  width: 100px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.habits-streak-visual {
+  flex: 1;
+  margin: 0 var(--spacing-md);
+  height: 30px;
+  background-color: var(--habits-primary);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+/* Add habit modal styles */
+.habits-color-options {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  justify-content: center;
+  padding: 0 var(--spacing-sm);
+}
+
+.habits-color-option {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform var(--transition-fast);
+}
+
+.habits-color-option:hover {
+  transform: scale(1.1);
+}
+
+.habits-color-option.selected {
+  border-color: white;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Load More button styles for habits history */
+/* The Load More page: as wide as a month, so it is a page of its own at the
+   far left of the strip rather than sharing the view with a cut-off month. */
+.habits-load-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  /* Sits at the far LEFT of the strip, before the oldest month, so the gap
+     belongs on its right-hand side. */
+  margin-right: var(--spacing-md);
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+}
+
+.habits-load-more-button {
+  background-color: var(--habits-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  height: 40px;
+  /* One line, always. In a narrow box it wrapped to two inside a 40px-tall
+     button, and "History" spilled out of the bottom. */
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+}
+
+.habits-load-more-button:hover {
+  background-color: var(--habits-dark);
+}
+
+.habits-load-more-button:active {
+  transform: translateY(1px);
+}
+
+/* Fix for add/delete buttons color in habits view */
+#habits-add-button,
+#habits-delete-button,
+#habits-edit-button {
+  color: var(--text-primary);
+}
+#habits-back-button,
+#habits-edit-calendar-button {
+  color: var(--text-primary);
+}
+
+/* Habit input styling - UPDATED */
+#habit-name-input {
+  /* Styles now handled in core-styles.css modal section */
+}
+
+/* Active state for the rearrange button */
+#habits-rearrange-button.active {
+  background-color: var(--habits-primary);
+  color: white;
+}
+
+/* Color classes for all elements */
+/* Circle colors */
+.habit-item.red .circle { border-color: #FF0000; }
+.habit-item.coral .circle { border-color: #FF5042; }
+.habit-item.pink .circle { border-color: #FF4A8D; }
+.habit-item.lightpink .circle { border-color: #FFC8F0; }
+.habit-item.purple .circle { border-color: #B96CDA; }
+.habit-item.navy .circle { border-color: #334C77; }
+.habit-item.skyblue .circle { border-color: #58B5F0; }
+.habit-item.royalblue .circle { border-color: #5B6EF7; }
+.habit-item.blue .circle { border-color: #2196F3; }
+.habit-item.teal .circle { border-color: #40BBD4; }
+.habit-item.lightblue .circle { border-color: #77D1F3; }
+.habit-item.lightgreen .circle { border-color: #5DD959; }
+.habit-item.green .circle { border-color: #4CAF50; }
+.habit-item.darkgreen .circle { border-color: #159D82; }
+.habit-item.seagreen .circle { border-color: #4AD6B8; }
+.habit-item.yellow .circle { border-color: #FFDE0A; }
+.habit-item.orange .circle { border-color: #FF9F29; }
+.habit-item.tangerine .circle { border-color: #FF7B29; }
+.habit-item.darkorange .circle { border-color: #E25C28; }
+.habit-item.gray .circle { border-color: #A5A5A5; }
+
+/* Name colors */
+.habit-item.red .name { color: #FF0000; }
+.habit-item.coral .name { color: #FF5042; }
+.habit-item.pink .name { color: #FF4A8D; }
+.habit-item.lightpink .name { color: #FFC8F0; }
+.habit-item.purple .name { color: #B96CDA; }
+.habit-item.navy .name { color: #334C77; }
+.habit-item.skyblue .name { color: #58B5F0; }
+.habit-item.royalblue .name { color: #5B6EF7; }
+.habit-item.blue .name { color: #2196F3; }
+.habit-item.teal .name { color: #40BBD4; }
+.habit-item.lightblue .name { color: #77D1F3; }
+.habit-item.lightgreen .name { color: #5DD959; }
+.habit-item.green .name { color: #4CAF50; }
+.habit-item.darkgreen .name { color: #159D82; }
+.habit-item.seagreen .name { color: #4AD6B8; }
+.habit-item.yellow .name { color: #FFDE0A; }
+.habit-item.orange .name { color: #FF9F29; }
+.habit-item.tangerine .name { color: #FF7B29; }
+.habit-item.darkorange .name { color: #E25C28; }
+.habit-item.gray .name { color: #A5A5A5; }
+.habit-item.default .name { color: var(--text-primary); }
+
+/* Done checkmarks with colors */
+.habit-day.done.red svg { stroke: #FF0000; }
+.habit-day.done.coral svg { stroke: #FF5042; }
+.habit-day.done.pink svg { stroke: #FF4A8D; }
+.habit-day.done.lightpink svg { stroke: #FFC8F0; }
+.habit-day.done.purple svg { stroke: #B96CDA; }
+.habit-day.done.navy svg { stroke: #334C77; }
+.habit-day.done.skyblue svg { stroke: #58B5F0; }
+.habit-day.done.royalblue svg { stroke: #5B6EF7; }
+.habit-day.done.blue svg { stroke: #2196F3; }
+.habit-day.done.teal svg { stroke: #40BBD4; }
+.habit-day.done.lightblue svg { stroke: #77D1F3; }
+.habit-day.done.lightgreen svg { stroke: #5DD959; }
+.habit-day.done.green svg { stroke: #4CAF50; }
+.habit-day.done.darkgreen svg { stroke: #159D82; }
+.habit-day.done.seagreen svg { stroke: #4AD6B8; }
+.habit-day.done.yellow svg { stroke: #FFDE0A; }
+.habit-day.done.orange svg { stroke: #FF9F29; }
+.habit-day.done.tangerine svg { stroke: #FF7B29; }
+.habit-day.done.darkorange svg { stroke: #E25C28; }
+.habit-day.done.gray svg { stroke: #A5A5A5; }
+.habit-day.done.default svg { stroke: var(--text-primary); }
+
+/* Color options */
+.habits-color-option.red { background-color: #FF0000; }
+.habits-color-option.coral { background-color: #FF5042; }
+.habits-color-option.pink { background-color: #FF4A8D; }
+.habits-color-option.lightpink { background-color: #FFC8F0; }
+.habits-color-option.purple { background-color: #B96CDA; }
+.habits-color-option.navy { background-color: #334C77; }
+.habits-color-option.skyblue { background-color: #58B5F0; }
+.habits-color-option.royalblue { background-color: #5B6EF7; }
+.habits-color-option.blue { background-color: #2196F3; }
+.habits-color-option.teal { background-color: #40BBD4; }
+.habits-color-option.lightblue { background-color: #77D1F3; }
+.habits-color-option.lightgreen { background-color: #5DD959; }
+.habits-color-option.green { background-color: #4CAF50; }
+.habits-color-option.darkgreen { background-color: #159D82; }
+.habits-color-option.seagreen { background-color: #4AD6B8; }
+.habits-color-option.yellow { background-color: #FFDE0A; }
+.habits-color-option.orange { background-color: #FF9F29; }
+.habits-color-option.tangerine { background-color: #FF7B29; }
+.habits-color-option.darkorange { background-color: #E25C28; }
+.habits-color-option.gray { background-color: #A5A5A5; }
+.habits-color-option.default {
+  background-color: #FFFFFF;
+  border: 2px solid var(--border-color);
+}
+
+.habits-color-option.default.selected {
+  border-color: var(--habits-primary);
+  box-shadow: 0 0 0 2px rgba(103, 58, 183, 0.5);
+}
+
+/* Calendar cell colors */
+.habits-calendar-cell.active.red { background-color: #FF0000; }
+.habits-calendar-cell.active.coral { background-color: #FF5042; }
+.habits-calendar-cell.active.pink { background-color: #FF4A8D; }
+.habits-calendar-cell.active.lightpink { background-color: #FFC8F0; }
+.habits-calendar-cell.active.purple { background-color: #B96CDA; }
+.habits-calendar-cell.active.navy { background-color: #334C77; }
+.habits-calendar-cell.active.skyblue { background-color: #58B5F0; }
+.habits-calendar-cell.active.royalblue { background-color: #5B6EF7; }
+.habits-calendar-cell.active.blue { background-color: #2196F3; }
+.habits-calendar-cell.active.teal { background-color: #40BBD4; }
+.habits-calendar-cell.active.lightblue { background-color: #77D1F3; }
+.habits-calendar-cell.active.lightgreen { background-color: #5DD959; }
+.habits-calendar-cell.active.green { background-color: #4CAF50; }
+.habits-calendar-cell.active.darkgreen { background-color: #159D82; }
+.habits-calendar-cell.active.seagreen { background-color: #4AD6B8; }
+.habits-calendar-cell.active.yellow { background-color: #FFDE0A; }
+.habits-calendar-cell.active.orange { background-color: #FF9F29; }
+.habits-calendar-cell.active.tangerine { background-color: #FF7B29; }
+.habits-calendar-cell.active.darkorange { background-color: #E25C28; }
+.habits-calendar-cell.active.gray { background-color: #A5A5A5; }
+.habits-calendar-cell.active.default { 
+  background-color: #FFFFFF; 
+  color: var(--background);
+}
+
+/* Streak colors */
+.habits-streak-visual.red { background-color: #FF0000; }
+.habits-streak-visual.coral { background-color: #FF5042; }
+.habits-streak-visual.pink { background-color: #FF4A8D; }
+.habits-streak-visual.lightpink { background-color: #FFC8F0; }
+.habits-streak-visual.purple { background-color: #B96CDA; }
+.habits-streak-visual.navy { background-color: #334C77; }
+.habits-streak-visual.skyblue { background-color: #58B5F0; }
+.habits-streak-visual.royalblue { background-color: #5B6EF7; }
+.habits-streak-visual.blue { background-color: #2196F3; }
+.habits-streak-visual.teal { background-color: #40BBD4; }
+.habits-streak-visual.lightblue { background-color: #77D1F3; }
+.habits-streak-visual.lightgreen { background-color: #5DD959; }
+.habits-streak-visual.green { background-color: #4CAF50; }
+.habits-streak-visual.darkgreen { background-color: #159D82; }
+.habits-streak-visual.seagreen { background-color: #4AD6B8; }
+.habits-streak-visual.yellow { background-color: #FFDE0A; }
+.habits-streak-visual.orange { background-color: #FF9F29; }
+.habits-streak-visual.tangerine { background-color: #FF7B29; }
+.habits-streak-visual.darkorange { background-color: #E25C28; }
+.habits-streak-visual.gray { background-color: #A5A5A5; }
+.habits-streak-visual.default { 
+  background-color: #FFFFFF; 
+  color: var(--background);
+}
+
+.habits-streak-visual.text-dark {
+  color: #333 !important;
+}
+
+/* Section title colors */
+.habits-section-title.red { color: #FF0000; }
+.habits-section-title.coral { color: #FF5042; }
+.habits-section-title.pink { color: #FF4A8D; }
+.habits-section-title.lightpink { color: #FFC8F0; }
+.habits-section-title.purple { color: #B96CDA; }
+.habits-section-title.navy { color: #334C77; }
+.habits-section-title.skyblue { color: #58B5F0; }
+.habits-section-title.royalblue { color: #5B6EF7; }
+.habits-section-title.blue { color: #2196F3; }
+.habits-section-title.teal { color: #40BBD4; }
+.habits-section-title.lightblue { color: #77D1F3; }
+.habits-section-title.lightgreen { color: #5DD959; }
+.habits-section-title.green { color: #4CAF50; }
+.habits-section-title.darkgreen { color: #159D82; }
+.habits-section-title.seagreen { color: #4AD6B8; }
+.habits-section-title.yellow { color: #FFDE0A; }
+.habits-section-title.orange { color: #FF9F29; }
+.habits-section-title.tangerine { color: #FF7B29; }
+.habits-section-title.darkorange { color: #E25C28; }
+.habits-section-title.gray { color: #A5A5A5; }
+
+/* Chart points colors */
+.habits-chart-point.red { background-color: #FF0000; }
+.habits-chart-point.coral { background-color: #FF5042; }
+.habits-chart-point.pink { background-color: #FF4A8D; }
+.habits-chart-point.lightpink { background-color: #FFC8F0; }
+.habits-chart-point.purple { background-color: #B96CDA; }
+.habits-chart-point.navy { background-color: #334C77; }
+.habits-chart-point.skyblue { background-color: #58B5F0; }
+.habits-chart-point.royalblue { background-color: #5B6EF7; }
+.habits-chart-point.blue { background-color: #2196F3; }
+.habits-chart-point.teal { background-color: #40BBD4; }
+.habits-chart-point.lightblue { background-color: #77D1F3; }
+.habits-chart-point.lightgreen { background-color: #5DD959; }
+.habits-chart-point.green { background-color: #4CAF50; }
+.habits-chart-point.darkgreen { background-color: #159D82; }
+.habits-chart-point.seagreen { background-color: #4AD6B8; }
+.habits-chart-point.yellow { background-color: #FFDE0A; }
+.habits-chart-point.orange { background-color: #FF9F29; }
+.habits-chart-point.tangerine { background-color: #FF7B29; }
+.habits-chart-point.darkorange { background-color: #E25C28; }
+.habits-chart-point.gray { background-color: #A5A5A5; }
+.habits-chart-point.default { background-color: #FFFFFF; }
+
+/* Empty state message styling */
+.empty-habits-message {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .habit-name-section {
+    width: 40%;
+    padding: 0 10px;
+  }
+  
+  .habit-grid-section,
+  .dates-container {
+    width: 60%;
+  }
+  
+  .date-navigation {
+    padding: 0 4px;
+    width: 40%; /* Match habit-name-section width */
+    justify-content: flex-start;
+  }
+  
+  .date-nav-button {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    margin: 0 2px;
+  }
+  
+  .today-button {
+    min-width: 50px;
+    padding: 0 4px;
+    font-size: 11px;
+    opacity: 0; /* Maintain hidden state */
+  }
+  
+  .show-navigation .today-button {
+    opacity: 1; /* Show when navigation active */
+  }
+  
+  .habit-day svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .habits-streak-date {
+    width: 80px;
+    font-size: 12px;
+  }
+  
+  .habits-chart {
+    height: 150px;
+  }
+  
+  .time-period-dropdown {
+    min-width: 90px;
+    font-size: 12px;
+    padding: 4px 24px 4px 8px;
+  }
+}
+
+/* Additional responsive adjustments for very small screens */
+@media (max-width: 360px) {
+  .habit-name-section {
+    width: 45%; /* Increase width slightly on very small screens */
+    padding: 0 5px; /* Reduce padding */
+  }
+  
+  .habit-grid-section,
+  .dates-container {
+    width: 55%; /* Decrease width to make room for habit name */
+  }
+  
+  .date-navigation {
+    width: 45%; /* Match habit-name-section width */
+    padding: 0 2px;
+  }
+  
+  .date-nav-button {
+    min-width: 24px;
+    width: 24px;
+    height: 24px;
+    margin: 0 1px;
+  }
+  
+  .today-button {
+    min-width: 40px;
+    font-size: 10px;
+    opacity: 0; /* Maintain hidden state */
+  }
+  
+  .show-navigation .today-button {
+    opacity: 1; /* Show when navigation active */
+    pointer-events: all; /* Re-enable interaction */
+  }
+  
+  /* Chart-specific color overrides for SVG elements */
+  .red svg path { stroke: #FF0000; }
+  .coral svg path { stroke: #FF5042; }
+  .pink svg path { stroke: #FF4A8D; }
+  .lightpink svg path { stroke: #FFC8F0; }
+  .purple svg path { stroke: #B96CDA; }
+  .navy svg path { stroke: #334C77; }
+  .skyblue svg path { stroke: #58B5F0; }
+  .royalblue svg path { stroke: #5B6EF7; }
+  .blue svg path { stroke: #2196F3; }
+  .teal svg path { stroke: #40BBD4; }
+  .lightblue svg path { stroke: #77D1F3; }
+  .lightgreen svg path { stroke: #5DD959; }
+  .green svg path { stroke: #4CAF50; }
+  .darkgreen svg path { stroke: #159D82; }
+  .seagreen svg path { stroke: #4AD6B8; }
+  .yellow svg path { stroke: #FFDE0A; }
+  .orange svg path { stroke: #FF9F29; }
+  .tangerine svg path { stroke: #FF7B29; }
+  .darkorange svg path { stroke: #E25C28; }
+  .gray svg path { stroke: #A5A5A5; }
+  .default svg path { stroke: #673AB7; }
+  
+  /* Animation for chart rendering */
+  @keyframes fadeInChart {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .habits-chart svg {
+    animation: fadeInChart 0.5s ease-out;
+  }
+  
+  .habits-chart-point {
+    animation: fadeInChart 0.5s ease-out;
+  }
+  
+  /* Smooth hover transitions */
+  .habits-calendar-cell.editable {
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  
+  .habits-calendar-cell.editable:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+  }
+  
+  .habits-calendar-cell.editable:active {
+    transform: scale(0.95);
+  }
+  
+  /* Add modern neuromorphic effect to calendar cells */
+  .habits-calendar-cell.active {
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Improvements for date selector */
+  .date-item {
+    transition: transform 0.2s ease;
+  }
+  
+  .date-item:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Better focus styles for accessibility */
+  .time-period-dropdown:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(103, 58, 183, 0.4);
+  }
+  
+  .habits-small-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(103, 58, 183, 0.4);
+  }
+  
+  /* Enhanced styling for habit streaks section */
+  .habits-streak-visual {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .habits-streak-visual:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+  
+  /* Print styles for reports */
+  @media print {
+    .habits-app {
+      background-color: white;
+      color: black;
+    }
+    
+    .habits-chart-container, 
+    .habits-calendar-container,
+    .habits-streak-bar {
+      box-shadow: none;
+      border: 1px solid #ccc;
+    }
+    
+    .habit-day svg,
+    .habits-chart-point,
+    .habits-chart path {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    
+    .main-header, 
+    .tabs,
+    .icon-btn,
+    #habits-back-button {
+      display: none;
+    }
+    
+    .habits-section-title {
+      border-bottom: 1px solid #ccc;
+    }
+  }

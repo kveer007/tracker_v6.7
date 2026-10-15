@@ -1,0 +1,1583 @@
+:root {
+  /* Modern color palette */
+  --water-primary: #2196F3;
+  --water-light: #BBDEFB;
+  --water-dark: #0D47A1;
+  
+  --protein-primary: #F44336;
+  --protein-light: #FFCDD2;
+  --protein-dark: #B71C1C;
+  
+  /* Swapped colors between workout and habits */
+  --workout-primary: #4CAF50; /* Was previously #673AB7 (purple) */
+  --workout-light: #C8E6C9;   /* Was previously #D1C4E9 */
+  --workout-dark: #2E7D32;    /* Was previously #4527A0 */
+  
+  --habits-primary: #673AB7;  /* Was previously #4CAF50 (green) */
+  --habits-light: #D1C4E9;    /* Was previously #C8E6C9 */
+  --habits-dark: #4527A0;     /* Was previously #2E7D32 */
+  
+  --neutral-primary: #607D8B;
+  --neutral-light: #CFD8DC;
+  --neutral-dark: #455A64;
+  
+  --background: #121212; /* Dark background to match iPhone screenshot */
+  --card-bg: #1E1E1E;    /* Dark card background */
+  --text-primary: #E0E0E0;
+  --text-secondary: #9E9E9E;
+  --border-color: #333333;
+  
+  --success: #4CAF50;
+  --warning: #FFC107;
+  --danger: #F44336;
+  
+  /* Effects */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+  
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  
+  /* Layout */
+  --header-height: 60px;
+  --content-max-width: 500px;
+}
+
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  font-size: 16px;
+}
+
+/* No double-tap zoom anywhere in the app - a quick second tap on a button
+   zoomed the page in. "manipulation" keeps scrolling and pinch-zoom, and also
+   drops the delay browsers add to taps while waiting for a second one.
+
+   Set on every element, not just html: touch-action is not inherited, and the
+   browser only combines an element's value with its ancestors' up to the
+   nearest scrolling box - so inside the history panels or the calendar strip,
+   a value on html alone would not apply. */
+*,
+*::before,
+*::after {
+  touch-action: manipulation;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--background);
+  color: var(--text-primary);
+  min-height: 100%;
+  padding: 0;
+  margin: 0;
+  transition: background-color var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.app-wrapper {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  width: 100%;
+
+  /* Keep clear of the notch, the rounded corners and the home indicator when
+     running as an installed app. viewport-fit=cover in index.html lets the
+     page paint edge to edge; these insets put the content back in the safe
+     area. env() falls back to 0px on browsers that do not report insets. */
+  padding: calc(var(--spacing-md) + env(safe-area-inset-top, 0px))
+           calc(var(--spacing-md) + env(safe-area-inset-right, 0px))
+           calc(var(--spacing-md) + env(safe-area-inset-bottom, 0px))
+           calc(var(--spacing-md) + env(safe-area-inset-left, 0px));
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+}
+
+h3 {
+  font-size: 1.125rem;
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+  line-height: 1.5;
+}
+
+/* Header */
+.main-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(to right, 
+    #4D96FF 0%, 
+    #B96CDA 50%, 
+    #FF6B6B 100%);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.main-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: var(--spacing-sm) 0;
+  font-size: 1.5rem;
+  text-align: center;
+  z-index: 2;
+}
+
+/* Add decorative element to header */
+.main-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent 70%);
+  z-index: 1;
+}
+
+.main-header .icon-btn {
+  position: absolute;
+  right: var(--spacing-md);
+  color: white;
+  z-index: 2;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  transition: box-shadow var(--transition-fast);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-weight: 500;
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  color: white;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  height: 50px;
+  font-size: 1.1rem;
+  padding: 0 var(--spacing-md);
+}
+
+.action-btn.neutral {
+  background: var(--neutral-primary);
+}
+
+.action-btn.neutral:hover {
+  background: var(--neutral-dark);
+}
+
+/* Updated action button colors */
+.action-btn.habits {
+  background: var(--habits-primary);
+}
+
+.action-btn.habits:hover {
+  background: var(--habits-dark);
+}
+
+/* Same height and type as .action-btn, so a settings panel's buttons line up
+   as one set. It used to take the browser's small default button text and
+   its own padding, so "Reset All Data" sat shorter and smaller-lettered than
+   the buttons above it. */
+.danger-btn {
+  background: var(--danger);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  height: 50px;
+  padding: 0 var(--spacing-lg);
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-lg);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.danger-btn:hover {
+  background: #D32F2F;
+}
+
+.reset-btn {
+  background: var(--warning);
+  /* Dark on amber. Light grey (--text-primary) on amber, as before, was
+     close to unreadable. */
+  color: #1A1A1A;
+  border-radius: var(--radius-md);
+  width: 100%;
+  margin-top: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  font-weight: 500;
+  font-size: 0.9rem;
+  height: 36px;
+  opacity: 0.9;
+}
+
+.reset-btn:hover {
+  background: #FFB300;
+  opacity: 1;
+}
+
+.reset-btn .material-icons-round {
+  font-size: 16px;
+}
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.btn-group.vertical {
+  flex-direction: column;
+}
+
+/* In the settings panels every button spans the panel. Save Goal and Reset
+   All Data used to size to their text and sit at the left, between
+   full-width reminder buttons. Row groups only: in a .vertical (column)
+   group the flex-basis is a HEIGHT, and 100% of an auto height squashed the
+   buttons - they already stretch to full width there. */
+.settings-panel .btn-group:not(.vertical) > button {
+  flex: 1 1 100%;
+}
+
+.import-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Tabs - moved from habits-styles.css */
+.tabs {
+  display: flex;
+  background: var(--card-bg);
+  border-radius: var(--radius-full);
+  padding: var(--spacing-xs);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+}
+
+/* Additional responsive styles for tabs */
+@media (max-width: 600px) {
+  .tab-btn {
+    padding: var(--spacing-md) 4px; /* Reduced horizontal padding */
+    gap: 4px; /* Reduced gap */
+    font-size: 0.9rem; /* Slightly reduced font size */
+    min-width: 0; /* Allow shrinking below content size */
+  }
+  
+  .tab-btn span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis for text that overflows */
+    max-width: 100%; /* Ensure text doesn't expand beyond button */
+  }
+  
+  .tab-btn .material-icons-round {
+    font-size: 1.3rem; /* Slightly smaller icons */
+    min-width: 20px; /* Ensure icon has minimum width */
+  }
+}
+
+/* Additional responsive adjustments for very small screens */
+@media (max-width: 360px) {
+  .tab-btn {
+    padding: var(--spacing-sm) 2px; /* Even smaller padding for very small screens */
+    font-size: 0.8rem; /* Smaller text */
+    gap: 2px; /* Smaller gap */
+  }
+  
+  .tab-btn .material-icons-round {
+    font-size: 1.2rem; /* Even smaller icons */
+  }
+}
+
+.tab-btn span {
+  white-space: nowrap;
+}
+
+.tab-btn .material-icons-round {
+  font-size: 1.5rem;
+}
+
+/* Updated tab active styles */
+.tab-btn.active[data-app="habits"] {
+  background: var(--habits-primary);
+  color: white;
+}
+
+.tab-btn.active[data-app="workout"] {
+  background: var(--workout-primary);
+  color: white;
+}
+
+.tabs-inner {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--spacing-lg);
+}
+
+.tab-button {
+  flex: 1;
+  padding: var(--spacing-md);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-weight: 500;
+  position: relative;
+}
+
+.tab-button.active {
+  color: var(--text-primary);
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+}
+
+.tab-content {
+  display: none;
+  padding: var(--spacing-md) 0;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeIn var(--transition-fast);
+}
+
+/* Form elements */
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+label {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  transition: border-color var(--transition-fast);
+  height: 50px;
+}
+
+input[type="number"]:focus {
+  outline: none;
+  border-color: var(--neutral-primary);
+}
+
+/* App containers */
+.app-container {
+  display: none;
+}
+
+.app-container.active {
+  display: block;
+  animation: fadeIn 0.4s ease;
+}
+
+/* Opacity only - no transform. While an element has a transform, it (not
+   the screen) becomes the box its position:fixed children are placed in. The
+   Settings and History panels are fixed children of each tab, parked just
+   off the right edge; during a slide-up fade they briefly sat inside the
+   page instead, and the browser widened the page to fit them (412px phone
+   -> 800px page) and kept it that wide - draggable sideways and zoomable. */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Panels (Settings, History, etc.) */
+.panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 350px;
+  height: 100%;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  padding: var(--spacing-lg);
+  transform: translateX(100%);
+  transition: transform var(--transition-normal);
+  overflow-y: auto;
+}
+
+.panel.active {
+  transform: translateX(0);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.close-panel {
+  cursor: pointer;
+}
+
+/* Day entries in history */
+.day-entry {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: var(--spacing-md);
+  transition: background var(--transition-fast);
+}
+
+.day-entry:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.day-entry p {
+  margin-bottom: var(--spacing-xs);
+}
+
+.day-entry p:last-child {
+  margin-bottom: 0;
+}
+
+/* Toast Notifications */
+#toast-container {
+  position: fixed;
+  /* Lift clear of the home indicator on gesture-navigation phones. */
+  bottom: calc(var(--spacing-lg) + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  /* Above the pop-up windows (.modal is 10000, its content 10001). At 1000 a
+     toast raised from inside one - "Chest added" in Add Missed Workout, with
+     its Undo - appeared behind the window and was never seen. When empty the
+     container has no height, so it never blocks taps on a window. */
+  z-index: 10010;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  max-width: 300px;
+  width: 100%;
+}
+
+.toast {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  box-shadow: var(--shadow-lg);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  animation: slideUp 0.3s ease;
+  opacity: 1;
+}
+
+.toast.success {
+  border-left: 4px solid var(--success);
+}
+
+.toast.warning {
+  border-left: 4px solid var(--warning);
+}
+
+.toast.error {
+  border-left: 4px solid var(--danger);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.toast-closing {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--neutral-primary);
+  outline-offset: 2px;
+}
+
+/* Animation for panels */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Material Icons Adjustments */
+.material-icons-round {
+  font-family: 'Material Icons Round';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Slide Panel */
+#more-options-panel {
+  z-index: 101;
+}
+
+/* Modal styling improvements - moved from habits */
+.modal {
+  z-index: 1000; /* Ensure modal is on top */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none; /* Initially hidden */
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+  max-width: 350px;
+  width: 90%;
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+  color: var(--text-primary);
+  position: relative;
+}
+
+.modal-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.modal-button {
+  flex: 1;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  height: 50px;
+  transition: all var(--transition-fast);
+}
+
+.modal-button.cancel {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.modal-button.cancel:hover {
+  background-color: #555;
+}
+
+/* Load More button styles for habits history */
+.habits-load-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  margin-right: var(--spacing-md);
+  flex-shrink: 0;
+  width: 320px;
+}
+
+.habits-load-more-button {
+  background-color: var(--habits-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  height: 40px;
+  box-shadow: var(--shadow-sm);
+}
+
+.habits-load-more-button:hover {
+  background-color: var(--habits-dark);
+}
+
+.habits-load-more-button:active {
+  transform: translateY(1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  :root {
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+  }
+
+  /* Tighter padding on phones, but the safe-area insets must survive.
+     This rule used to be a plain `padding: var(--spacing-sm)`, which silently
+     wiped all four insets on exactly the devices that need them - so on a
+     notched iPhone the content had nothing holding it clear of the edges. */
+  .app-wrapper {
+    padding: calc(var(--spacing-sm) + env(safe-area-inset-top, 0px))
+             calc(var(--spacing-sm) + env(safe-area-inset-right, 0px))
+             calc(var(--spacing-sm) + env(safe-area-inset-bottom, 0px))
+             calc(var(--spacing-sm) + env(safe-area-inset-left, 0px));
+  }
+
+  .main-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .card {
+    padding: var(--spacing-md);
+  }
+
+  .panel {
+    max-width: 100%;
+  }
+}
+
+/* Hide file input but keep it functional */
+input[type="file"]#import-file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Toggle Switch Styling */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--border-color);
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--card-bg);
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: var(--habits-primary);
+}
+
+.water-app input:checked + .toggle-slider {
+  background-color: var(--water-primary);
+}
+
+.protein-app input:checked + .toggle-slider {
+  background-color: var(--protein-primary);
+}
+
+.workout-app input:checked + .toggle-slider {
+  background-color: var(--workout-primary);
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(24px);
+}
+
+/* Notification Setting Styles */
+.notification-setting {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-header h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.notification-description {
+  margin-top: var(--spacing-xs);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Inline toggle setting for button groups */
+.inline-setting {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.inline-setting .notification-header {
+  margin: 0;
+}
+
+.inline-setting h4 {
+  font-size: 0.9rem;
+  margin-right: 8px;
+}
+
+.btn-group .notification-setting {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-md);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .btn-group .notification-setting {
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .inline-setting h4 {
+    font-size: 0.8rem;
+  }
+}
+
+/* ==========================================
+   CRITICAL MODAL FIXES
+   ========================================== */
+
+/* Ensure modal appears above everything */
+.modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 10000 !important;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal backdrop */
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(2px);
+}
+
+/* When modal is shown */
+.modal[style*="flex"] {
+  display: flex !important;
+}
+
+/* Modal content container */
+.modal .modal-content {
+  background: var(--card-bg) !important;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  width: 90%;
+  max-width: 400px;
+  color: var(--text-primary);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  position: relative;
+  z-index: 10001;
+}
+
+/* Ensure modal input works */
+.modal .modal-input {
+  width: 100% !important;
+  padding: var(--spacing-md);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  margin-bottom: var(--spacing-lg);
+  box-sizing: border-box;
+}
+
+.modal .modal-input:focus {
+  outline: none;
+  border-color: var(--habits-primary);
+}
+
+/* Override any conflicting modal styles */
+.modal-header {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  margin-bottom: var(--spacing-lg) !important;
+  color: var(--text-primary) !important;
+  text-align: center !important;
+}
+
+.modal-buttons {
+  display: flex !important;
+  justify-content: space-between !important;
+  gap: var(--spacing-md) !important;
+}
+
+.modal-button {
+  flex: 1 !important;
+  padding: var(--spacing-md) !important;
+  border-radius: var(--radius-md) !important;
+  font-weight: 600 !important;
+  height: 50px !important;
+  transition: all var(--transition-fast) !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.modal-button.cancel {
+  background-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.modal-button.cancel:hover {
+  background-color: #555 !important;
+}
+
+.modal-button.confirm {
+  background-color: var(--habits-primary) !important;
+  color: white !important;
+}
+
+.modal-button.confirm:hover {
+  background-color: var(--habits-dark) !important;
+}
+
+/* Destructive confirmations read as destructive. */
+.modal-button.confirm.danger {
+  background-color: var(--danger) !important;
+}
+
+.modal-button.confirm.danger:hover {
+  filter: brightness(0.9);
+}
+
+/* Pre-paint tab selection.
+   The inline script in index.html stamps data-initial-tab from the saved tab
+   before the browser paints, so the app never shows Water first and then jumps
+   to the tab you were actually on. Plain CSS specificity does the swap; once
+   the scripts load, .active takes over as normal. */
+body[data-initial-tab] .app-container.active { display: none; }
+body[data-initial-tab="protein"] #protein-app,
+body[data-initial-tab="workout"] #workout-app,
+body[data-initial-tab="habits"] #habits-app { display: block; }
+
+body[data-initial-tab] .tab-btn.active { color: var(--text-secondary); }
+body[data-initial-tab="protein"] #protein-tab-btn,
+body[data-initial-tab="workout"] #workout-tab-btn,
+body[data-initial-tab="habits"] #habits-tab-btn { color: var(--text-primary); }
+
+/* ==========================================
+   CHARTS
+   ========================================== */
+
+/* Headline figure above a chart, so the answer is readable without having to
+   interpret the line. */
+.chart-summary {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  min-height: 24px;
+  flex-wrap: wrap;
+}
+
+.chart-summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.chart-summary-caption {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* X-axis labels are positioned at their data point's exact x coordinate.
+   They used to be flex children with space-between, which spread them evenly
+   regardless of where the points actually were. */
+.chart-labels-positioned {
+  position: relative;
+  display: block !important;
+  height: 18px;
+}
+
+.chart-labels-positioned span {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+/* Two-row labels (weeks): every bar on the first row, the month on the
+   second, left-aligned where it starts - chartUtils.renderTwoRowLabels(). */
+.chart-labels-positioned.chart-labels-two-row {
+  height: 34px;
+}
+
+.chart-labels-positioned span.chart-label-group {
+  top: 16px;
+  transform: none;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* The current (unfinished) week's label, dimmed like its bar. */
+.chart-labels-positioned span.chart-label-current {
+  opacity: 0.55;
+}
+
+/* One line under the graph saying what a bar is. */
+.chart-axis-caption {
+  margin: var(--spacing-sm) 0 0;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
+.chart-axis-caption:empty {
+  display: none;
+}
+
+/* Tapping a point shows its value - the old title attribute did nothing on
+   touch. */
+.chart-value-bubble {
+  position: absolute;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--text-primary);
+  color: var(--card-bg);
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast, 0.15s) ease;
+  z-index: 5;
+}
+
+.chart-value-bubble.visible {
+  opacity: 1;
+}
+
+/* ==========================================
+   ADD MISSED WORKOUT
+   ========================================== */
+
+.missed-workout-day {
+  margin-top: var(--spacing-lg);
+  /* Room between the day's list and the Close button, which used to sit
+     right against the last row. */
+  margin-bottom: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.missed-workout-day h4 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+#missed-workout-existing {
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.missed-workout-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+}
+
+.missed-workout-remove {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--danger);
+  color: white;
+  cursor: pointer;
+}
+
+.missed-workout-remove i {
+  font-size: 18px;
+}
+
+.missed-workout-empty {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: var(--spacing-md);
+  margin: 0;
+}
+
+/* ==========================================
+   HISTORY EDITING
+   Pencil buttons in the water, protein and workout history, and the shared
+   edit window they open (dayEditor in core/ui.js).
+   ========================================== */
+
+/* Date line of a history day: date on the left, pencil on the right. */
+.day-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.history-edit-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.history-edit-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.history-edit-btn i {
+  font-size: 18px;
+}
+
+/* Long days scroll inside the window rather than pushing Save off screen. */
+.edit-day-rows {
+  max-height: 50vh;
+  overflow-y: auto;
+  margin-bottom: var(--spacing-sm);
+}
+
+.edit-day-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.edit-day-time,
+.edit-day-unit {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Overrides the full-width, 50px-tall global number input. */
+.edit-day-row input[type="number"],
+.edit-day-row select {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  height: 40px;
+  padding: 0 var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 1rem;
+}
+
+.edit-day-row select:focus {
+  outline: none;
+  border-color: var(--neutral-primary);
+}
+
+/* Same look as the ✕ in Add Missed Workout. */
+.edit-day-remove {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--danger);
+  color: white;
+}
+
+.edit-day-remove i {
+  font-size: 18px;
+}
+
+.edit-day-summary {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.edit-day-error {
+  color: var(--danger);
+  font-size: 0.85rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.edit-day-error:empty {
+  display: none;
+}
+
+/* ==========================================
+   UNDO TOAST
+   ========================================== */
+
+.toast.undo-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.toast.undo-toast .toast-message {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toast-undo-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  margin: calc(var(--spacing-xs) * -1) 0;
+  border-radius: var(--radius-sm);
+  /* Comfortably tappable on a phone without enlarging the toast. */
+  min-height: 32px;
+  opacity: 0.9;
+}
+
+.toast-undo-btn:hover,
+.toast-undo-btn:focus-visible {
+  background: rgba(255, 255, 255, 0.18);
+  opacity: 1;
+}
+
+/* ==========================================
+   SETTINGS TOGGLE ROW
+   ========================================== */
+
+.setting-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  margin-bottom: var(--spacing-md);
+}
+
+.setting-toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.setting-toggle-text label {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.setting-toggle-text small {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+/* ==========================================
+   NEW: NOTIFICATION BUTTONS SECTION
+   ========================================== */
+
+/* Notification Buttons Section */
+.notification-buttons-section {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-lg) 0;
+  flex-wrap: wrap;
+}
+
+.notification-button {
+  flex: 1;
+  min-width: 120px;
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  min-height: 80px;
+}
+
+.notification-button:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
+}
+
+.notification-button .material-icons-round {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.notification-button span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-primary);
+  transition: color var(--transition-fast);
+}
+
+.button-status {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  background: var(--text-secondary);
+  color: var(--card-bg);
+  opacity: 0.8;
+  transition: all var(--transition-fast);
+}
+
+/* Active state */
+.notification-button.active {
+  border-color: var(--success);
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.notification-button.active .material-icons-round {
+  color: var(--success);
+}
+
+.notification-button.active .button-status {
+  background: var(--success);
+  color: white;
+  opacity: 1;
+}
+
+/* Water tracker specific colors */
+.water-app .notification-button.active {
+  border-color: var(--water-primary);
+  background: rgba(33, 150, 243, 0.1);
+}
+
+.water-app .notification-button.active .material-icons-round {
+  color: var(--water-primary);
+}
+
+.water-app .notification-button.active .button-status {
+  background: var(--water-primary);
+}
+
+/* Protein tracker specific colors */
+.protein-app .notification-button.active {
+  border-color: var(--protein-primary);
+  background: rgba(244, 67, 54, 0.1);
+}
+
+.protein-app .notification-button.active .material-icons-round {
+  color: var(--protein-primary);
+}
+
+.protein-app .notification-button.active .button-status {
+  background: var(--protein-primary);
+}
+
+/* More options button styling */
+.notification-button.more-options {
+  border-color: #F39C12;
+  background: rgba(243, 156, 18, 0.05);
+}
+
+.notification-button.more-options:hover {
+  border-color: #E67E22;
+  background: rgba(243, 156, 18, 0.1);
+}
+
+.notification-button.more-options .material-icons-round {
+  color: #F39C12;
+}
+
+.notification-button.more-options span {
+  color: #F39C12;
+}
+
+/* Focus styles for accessibility */
+.notification-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.4);
+}
+
+.protein-app .notification-button:focus {
+  box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.4);
+}
+
+.notification-button.more-options:focus {
+  box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.4);
+}
+
+/* Responsive adjustments for notification buttons */
+@media (max-width: 600px) {
+  .notification-buttons-section {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .notification-button {
+    min-width: auto;
+    flex-direction: row;
+    justify-content: flex-start;
+    min-height: 60px;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .notification-button .material-icons-round {
+    font-size: 1.3rem;
+    margin-right: var(--spacing-sm);
+  }
+  
+  .notification-button span {
+    flex: 1;
+    text-align: left;
+    font-size: 1rem;
+  }
+  
+  .button-status {
+    position: static;
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .notification-button {
+    min-height: 50px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .notification-button .material-icons-round {
+    font-size: 1.2rem;
+  }
+  
+  .notification-button span {
+    font-size: 0.9rem;
+  }
+  
+  .button-status {
+    font-size: 0.6rem;
+    padding: 1px 4px;
+  }
+}

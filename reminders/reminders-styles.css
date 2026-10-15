@@ -1,0 +1,1331 @@
+/* Reminders & Notifications Styles - Updated with Layout Fix */
+
+/* Bell icon in header */
+.header-bell {
+  position: absolute;
+  left: var(--spacing-md);
+  color: white;
+  z-index: 2;
+  transition: transform 0.2s ease;
+}
+
+.header-bell:hover {
+  transform: scale(1.1);
+}
+
+.header-bell.has-active-reminders {
+  animation: bellRing 2s ease-in-out infinite;
+}
+
+@keyframes bellRing {
+  0%, 100% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(-10deg); }
+  20%, 40% { transform: rotate(10deg); }
+}
+
+/* Reminders panel */
+.reminders-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  padding: var(--spacing-lg);
+  transform: translateX(-100%);
+  transition: transform var(--transition-normal);
+  overflow-y: auto;
+}
+
+.reminders-panel.active {
+  transform: translateX(0);
+}
+
+/* Panel header */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.back-btn {
+  color: #F39C12;
+}
+
+.back-btn:hover {
+  background: rgba(243, 156, 18, 0.1);
+}
+
+/* Global reminders toggle section - UPDATED: Removed description */
+.global-reminders-section {
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-lg);
+  border: 2px solid var(--border-color);
+}
+
+.global-reminders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0; /* UPDATED: Removed margin since no description */
+}
+
+.global-reminders-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.global-reminders-title i {
+  color: #F39C12;
+  font-size: 1.3rem;
+}
+
+/* UPDATED: Hidden description - keeping for potential future use */
+.global-reminders-description {
+  display: none;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Reminders categories - Improved spacing and visual separation */
+.reminders-category {
+  margin-bottom: var(--spacing-xl);
+}
+
+.reminders-category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding: 0 var(--spacing-xs);
+}
+
+.reminders-category-header h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.reminders-count {
+  background: linear-gradient(135deg, var(--border-color), rgba(255,255,255,0.1));
+  color: var(--text-primary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-width: 24px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+}
+
+/* System reminders button */
+.system-reminders-btn {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-bottom: var(--spacing-lg);
+}
+
+.system-reminders-btn:hover {
+  border-color: #F39C12;
+  background: rgba(243, 156, 18, 0.05);
+}
+
+.system-reminders-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.system-reminders-info i {
+  font-size: 1.5rem;
+  color: #F39C12;
+}
+
+.system-reminders-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.system-reminders-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.system-reminders-count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.system-reminders-btn i:last-child {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+/* UPDATED: Custom reminder items - Toggle moved to header */
+.custom-reminder-item {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-sm);
+  overflow: hidden;
+  transition: all var(--transition-fast);
+}
+
+.custom-reminder-item:hover {
+  border-color: rgba(243, 156, 18, 0.3);
+  box-shadow: var(--shadow-sm);
+}
+
+.custom-reminder-item.disabled {
+  opacity: 0.6;
+}
+
+/* UPDATED: Custom reminder header with top-aligned toggle and centered arrow */
+.custom-reminder-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Changed from center to flex_start */
+  padding: var(--spacing-md);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  position: relative; /* For absolute positioning of elements */
+}
+
+.custom-reminder-main:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.custom-reminder-info {
+  flex: 1;
+  min-width: 0; /* Allows text to truncate properly */
+  margin-right: var(--spacing-md);
+}
+
+/* UPDATED: Custom reminder controls positioned at top right (toggle only) */
+.custom-reminder-header-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+  margin-top: 2px; /* Add small top margin to better align with title baseline */
+}
+
+/* NEW: Chevron arrow positioned in middle-right */
+.custom-reminder-header-controls .material-icons-round {
+  position: absolute;
+  right: var(--spacing-md);
+  top: 65%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+/* UPDATED: Remove the old bottom controls section */
+.custom-reminder-controls {
+  display: none;
+}
+
+.reminder-title {
+  margin: 0 0 6px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  min-height: 1.4rem; /* Ensure consistent height for alignment */
+}
+
+.reminder-schedule {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+/* Time window display for custom reminders */
+.reminder-time-window {
+  font-size: 0.85rem;
+  color: #F39C12;
+  margin: 0 0 6px 0;
+  font-weight: 500;
+  background: rgba(243, 156, 18, 0.1);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+/* Multiple times display for custom reminders */
+.reminder-times {
+  font-size: 0.85rem;
+  color: #2196F3;
+  margin: 0 0 6px 0;
+  font-weight: 500;
+  background: rgba(33, 150, 243, 0.1);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+.reminder-next {
+  font-size: 0.85rem;
+  color: #F39C12;
+  margin: 0 0 6px 0;
+  font-weight: 500;
+  background: rgba(243, 156, 18, 0.1);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+.reminder-notes {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0;
+  font-style: italic;
+  opacity: 0.8;
+  line-height: 1.3;
+}
+
+/* Custom reminder form - Improved visual hierarchy */
+.custom-reminder-form {
+  padding-top: var(--spacing-md);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Form help text for explanations */
+.form-help-text {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: var(--spacing-xs) 0 0 0;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* Form inputs - iOS-like styling */
+.reminder-title-input {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: border-color var(--transition-fast);
+}
+
+.reminder-title-input:focus {
+  outline: none;
+  border-color: #F39C12;
+  box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+}
+
+.reminder-title-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* Date and time inputs - Improved consistency */
+.date-time-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+/* Time window input group styling */
+.time-window-group {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.time-window-separator {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: center;
+  padding: 0 var(--spacing-xs);
+}
+
+.reminder-date-input,
+.reminder-time-input {
+  padding: var(--spacing-md);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.reminder-date-input:focus,
+.reminder-time-input:focus {
+  outline: none;
+  border-color: #F39C12;
+  box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.1);
+}
+
+/* Multiple times management */
+.times-container {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  padding: var(--spacing-sm);
+}
+
+.time-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.time-item:hover {
+  border-color: rgba(243, 156, 18, 0.3);
+}
+
+.time-item:last-child {
+  margin-bottom: 0;
+}
+
+.time-item input {
+  flex: 1;
+  min-width: 120px;
+}
+
+.remove-time-btn {
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.remove-time-btn:hover {
+  background: #D32F2F;
+  transform: scale(1.1);
+}
+
+.remove-time-btn i {
+  font-size: 14px;
+}
+
+.add-time-btn {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  font-weight: 500;
+  margin-top: var(--spacing-sm);
+}
+
+.add-time-btn:hover {
+  border-color: #F39C12;
+  color: #F39C12;
+  background: rgba(243, 156, 18, 0.05);
+  border-style: solid;
+}
+
+.add-time-btn i {
+  font-size: 16px;
+}
+
+/* Repeat selector - Enhanced dropdown styling */
+.reminder-repeat-select {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23F39C12' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 40px;
+  transition: all 0.2s ease;
+}
+
+.reminder-repeat-select:focus {
+  outline: none;
+  border-color: #F39C12;
+  box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.1);
+}
+
+/* Days selector for weekly repeat */
+.days-selector {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--spacing-sm);
+}
+
+.day-toggle {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  user-select: none;
+}
+
+.day-toggle:hover {
+  border-color: #F39C12;
+  color: var(--text-primary);
+  background: rgba(243, 156, 18, 0.1);
+}
+
+.day-toggle.active {
+  background: #F39C12;
+  border-color: #F39C12;
+  color: white;
+}
+
+.day-toggle:focus {
+  outline: 2px solid rgba(243, 156, 18, 0.5);
+  outline-offset: 2px;
+}
+
+/* UPDATED: System notification settings with expand functionality */
+.system-notification-settings {
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  display: none; /* Hidden by default */
+  transition: all var(--transition-fast);
+}
+
+.system-notification-settings.expanded {
+  display: block;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 300px;
+    padding-top: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+  }
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+}
+
+.setting-row:last-child {
+  margin-bottom: 0;
+}
+
+.setting-row label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+  min-width: 80px;
+}
+
+/* Time window row styling for system notifications */
+.time-window-row {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+}
+
+.time-window-row label {
+  margin-bottom: var(--spacing-xs);
+}
+
+.time-window-inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.time-window-input {
+  flex: 1;
+  min-width: 100px;
+}
+
+.system-setting-input {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  min-width: 120px;
+}
+
+.system-setting-input:focus {
+  outline: none;
+  border-color: #F39C12;
+}
+
+/* Alerts container - Improved visual organization */
+.alerts-container {
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.alert-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.alert-item:hover {
+  border-color: rgba(243, 156, 18, 0.3);
+  transform: translateX(2px);
+}
+
+.alert-item:last-child {
+  margin-bottom: 0;
+}
+
+.alert-select {
+  flex: 1;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.alert-select:focus {
+  outline: none;
+  border-color: #F39C12;
+}
+
+.remove-alert-btn {
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.remove-alert-btn:hover {
+  background: #D32F2F;
+  transform: scale(1.1);
+}
+
+.remove-alert-btn i {
+  font-size: 14px;
+}
+
+/* Add alert button - Enhanced styling */
+.add-alert-btn {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  font-weight: 500;
+}
+
+.add-alert-btn:hover {
+  border-color: #F39C12;
+  color: #F39C12;
+  background: rgba(243, 156, 18, 0.05);
+  border-style: solid;
+}
+
+.add-alert-btn i {
+  font-size: 16px;
+}
+
+/* Notes textarea - Enhanced styling */
+.reminder-notes-input {
+  width: 100%;
+  min-height: 100px;
+  padding: var(--spacing-md);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  resize: vertical;
+  transition: all 0.2s ease;
+  line-height: 1.5;
+}
+
+.reminder-notes-input:focus {
+  outline: none;
+  border-color: #F39C12;
+  box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.1);
+}
+
+.reminder-notes-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* Save and delete buttons */
+.save-reminder-btn {
+  width: 100%;
+  padding: var(--spacing-md);
+  background: #F39C12;
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-top: var(--spacing-md);
+}
+
+.save-reminder-btn:hover {
+  background: #E67E22;
+  transform: translateY(-1px);
+}
+
+.delete-reminder-btn {
+  color: var(--danger);
+}
+
+.delete-reminder-btn:hover {
+  background: rgba(244, 67, 54, 0.1);
+}
+
+/* Add reminder button */
+.add-reminder-btn {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  font-weight: 500;
+}
+
+.add-reminder-btn:hover {
+  border-color: #F39C12;
+  color: #F39C12;
+  background: rgba(243, 156, 18, 0.05);
+}
+
+/* UPDATED: System notification cards - Fixed layout without absolute positioning */
+.system-notification-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-md);
+  overflow: hidden;
+  transition: all var(--transition-fast);
+}
+
+.system-notification-card.enabled {
+  border-color: rgba(76, 175, 80, 0.3);
+}
+
+.system-notification-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-sm);
+}
+
+/* UPDATED: System notification header - no more relative positioning */
+.system-notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--border-color);
+  /* REMOVED: position: relative; - no longer needed */
+}
+
+.system-notification-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: 1;
+  min-width: 0;
+}
+
+.system-notification-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.system-notification-details h4 {
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.system-notification-summary {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.system-notification-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--neutral-primary);
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Specific notification type colors */
+.system-notification-card.supplements .system-notification-icon {
+  background: #9C27B0;
+}
+
+.system-notification-card.waterAlert .system-notification-icon {
+  background: var(--water-primary);
+}
+
+.system-notification-card.proteinAlert .system-notification-icon {
+  background: var(--protein-primary);
+}
+
+.system-notification-card.waterInterval .system-notification-icon {
+  background: #00BCD4;
+}
+
+.system-notification-card.proteinInterval .system-notification-icon {
+  background: #FF7043;
+}
+
+/* UPDATED: System notification controls - now includes expand button in flow */
+.system-notification-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm); /* Add gap between expand button and toggle */
+  flex-shrink: 0;
+}
+
+/* UPDATED: Expand button - moved to header controls, no absolute positioning */
+.system-expand-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  /* REMOVED: position: absolute, bottom, right, z-index */
+  /* REMOVED: opacity: 0, pointer-events: none */
+  /* Now flows naturally in the header */
+}
+
+/* UPDATED: Show expand button when enabled - simplified */
+.system-notification-card.enabled .system-expand-btn {
+  /* No longer need to override opacity/pointer-events */
+  color: var(--text-secondary);
+}
+
+.system-expand-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+/* Rotate arrow when expanded */
+.system-expand-btn.expanded {
+  transform: rotate(180deg);
+  color: #F39C12;
+}
+
+.system-expand-btn.expanded:hover {
+  color: #E67E22;
+}
+
+/* Toggle switches */
+.reminder-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.reminder-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.reminder-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--border-color);
+  transition: .3s ease;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reminder-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 2px;
+  background-color: white;
+  transition: .3s ease;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.reminder-toggle-switch input:checked + .reminder-toggle-slider {
+  background-color: #F39C12;
+  border-color: #E67E22;
+}
+
+.reminder-toggle-switch input:checked + .reminder-toggle-slider:before {
+  transform: translateX(24px);
+}
+
+.reminder-toggle-switch input:focus + .reminder-toggle-slider {
+  box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.3);
+}
+
+/* Empty reminders state */
+.empty-reminders {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-secondary);
+}
+
+.empty-reminders-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.5;
+}
+
+.empty-reminders p {
+  margin: 0;
+  font-style: italic;
+}
+
+/* UPDATED: Responsive adjustments for mobile */
+@media (max-width: 600px) {
+  .reminders-panel {
+    max-width: 100%;
+    padding: var(--spacing-md);
+  }
+  
+  .system-notification-header {
+    padding: var(--spacing-sm);
+    /* Ensure proper spacing on mobile */
+  }
+  
+  .system-notification-controls {
+    gap: var(--spacing-xs); /* Smaller gap on mobile */
+  }
+  
+  .system-expand-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 1.1rem;
+  }
+  
+  .reminder-toggle-switch {
+    width: 44px;
+    height: 22px;
+  }
+  
+  .reminder-toggle-slider:before {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .reminder-toggle-switch input:checked + .reminder-toggle-slider:before {
+    transform: translateX(20px);
+  }
+  
+  .system-notification-settings.expanded {
+    padding: var(--spacing-sm);
+  }
+  
+  .days-selector {
+    gap: var(--spacing-xs);
+  }
+  
+  /* 32px circles squeezed "Wed" and "Thu" against their borders. Seven of
+     these still fit a phone-width row; on the smallest screens the row wraps. */
+  .day-toggle {
+    width: 36px;
+    height: 36px;
+    font-size: 0.75rem;
+  }
+  
+  .date-time-group {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+  
+  /* Responsive time window controls */
+  .time-window-group {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+  
+  /* Stays in markup order - start, "to", end - once the inputs stack. It
+     used to carry order: 2, which moved "to" below both times. */
+  .time-window-separator {
+    margin: var(--spacing-xs) 0;
+  }
+  
+  .time-window-inputs {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .time-window-input {
+    min-width: auto;
+  }
+  
+  /* Responsive multiple times: the ✕ stays beside its time. These rows used
+     to stack, which put the ✕ under the input on its own line. */
+  .time-item {
+    gap: var(--spacing-xs);
+  }
+
+  .time-item input {
+    min-width: 0;
+  }
+
+  .remove-time-btn {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .custom-reminder-main {
+    padding: var(--spacing-sm);
+    align-items: flex-start; /* Maintain top alignment on mobile */
+    position: relative; /* Maintain relative positioning */
+  }
+  
+  .reminder-title {
+    font-size: 0.95rem;
+  }
+  
+  .reminder-schedule,
+  .reminder-next,
+  .reminder-time-window,
+  .reminder-times {
+    font-size: 0.8rem;
+  }
+  
+  /* Setting row responsive adjustments */
+  .setting-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+  
+  .setting-row label {
+    min-width: auto;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .system-setting-input {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .time-window-row {
+    gap: var(--spacing-xs);
+  }
+  
+  /* UPDATED: Responsive adjustments for inline toggle */
+  .custom-reminder-info {
+    margin-right: var(--spacing-sm);
+  }
+  
+  .custom-reminder-header-controls {
+    gap: var(--spacing-xs);
+    margin-top: 1px; /* Slightly less margin on mobile */
+  }
+  
+  /* UPDATED: Responsive chevron arrow positioning */
+  .custom-reminder-header-controls .material-icons-round {
+    right: var(--spacing-sm);
+  }
+}
+
+/* UPDATED: Very small screen adjustments */
+@media (max-width: 360px) {
+  .system-notification-controls {
+    gap: 2px; /* Minimal gap on very small screens */
+  }
+  
+  .system-expand-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 1rem;
+  }
+  
+  .reminder-toggle-switch {
+    width: 40px;
+    height: 20px;
+  }
+  
+  .reminder-toggle-slider:before {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .reminder-toggle-switch input:checked + .reminder-toggle-slider:before {
+    transform: translateX(18px);
+  }
+  
+  .form-group {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .reminder-title-input,
+  .reminder-date-input,
+  .reminder-time-input,
+  .reminder-repeat-select {
+    padding: var(--spacing-sm);
+    font-size: 0.9rem;
+  }
+  
+  .time-window-group {
+    gap: var(--spacing-xs);
+  }
+  
+  .form-help-text {
+    font-size: 0.75rem;
+  }
+  
+  .system-notification-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
+  }
+  
+  .alerts-container {
+    padding: var(--spacing-sm);
+  }
+  
+  /* The ✕ stays beside its alert, as for times. */
+  .alert-item {
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
+
+  .alert-select {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .remove-alert-btn {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Very small screen adjustments for multiple times */
+  .times-container {
+    padding: var(--spacing-xs);
+  }
+  
+  .time-item {
+    padding: var(--spacing-xs);
+  }
+  
+  .add-time-btn {
+    padding: var(--spacing-sm);
+    font-size: 0.8rem;
+  }
+  
+  /* UPDATED: Very small screen custom reminder adjustments */
+  .custom-reminder-main {
+    /* Keep flex layout even on very small screens for better toggle positioning */
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    position: relative; /* Maintain relative positioning */
+  }
+  
+  .custom-reminder-info {
+    margin-right: 0;
+    width: auto;
+    flex: 1;
+  }
+  
+  .custom-reminder-header-controls {
+    align-self: flex-start; /* Ensure it stays at the top */
+    flex-direction: row;
+    margin-top: 0;
+  }
+  
+  /* UPDATED: Very small screen chevron arrow positioning */
+  .custom-reminder-header-controls .material-icons-round {
+    right: var(--spacing-xs);
+  }
+}
+  
+/* Print styles for reports */
+@media print {
+  .reminders-panel {
+    position: static;
+    max-width: none;
+    height: auto;
+    background: white;
+    color: black;
+    padding: 20px;
+    box-shadow: none;
+  }
+  
+  .system-notification-card, 
+  .custom-reminder-item {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .system-expand-btn,
+  .close-panel,
+  .back-btn {
+    display: none;
+  }
+  
+  .reminder-time-window,
+  .reminder-times,
+  .reminder-next {
+    background: #f0f0f0;
+    color: #333;
+  }
+}

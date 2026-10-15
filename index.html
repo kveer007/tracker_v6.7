@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Daily Tracker</title>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8" />
+    <!-- maximum-scale=1: on iPhone, tapping a text box or drop-down whose
+         text is under 16px (the graph period menus, the reminder form)
+         zoomed the page in and left it zoomed. This stops that auto-zoom;
+         Safari still lets you pinch-zoom by hand. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#121212" />
+    <meta name="description" content="Track your daily water, protein, workout, and habits" />
+
+    <!-- PWA Support -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- "default", NOT "black-translucent". black-translucent makes iOS render
+         the web view UNDERNEATH the status bar, so the header sat on top of the
+         clock and battery. "default" keeps the app below the status bar, which
+         is where it belongs. -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Daily Tracker" />
+    <!-- The iPhone home-screen icon; Android takes its icons from
+         manifest.json. The ?v= number is part of the address: an iPhone
+         remembers an icon download that failed and then shows a letter on a
+         grey tile instead. Raising the number (here, in the manifest link
+         and in manifest.json's icon list) makes phones fetch them afresh. -->
+    <link rel="apple-touch-icon" href="icons/icon-192.png?v=7" />
+    <link rel="manifest" href="manifest.json?v=7" />
+    
+    <!-- Fonts and Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <!-- CSS Files - Separated into component-specific files -->
+    <link rel="stylesheet" href="core/core-styles.css" />
+    <link rel="stylesheet" href="trackers/trackers-styles.css" />
+    <link rel="stylesheet" href="workouts/workouts-styles.css" />
+    <link rel="stylesheet" href="habits/habits-styles.css" />
+    <link rel="stylesheet" href="reminders/reminders-styles.css" />
+  </head>
+  <body>
+    <script>
+      // Applied before first paint.
+      //
+      // The last-used tab is a stored setting that the main scripts only get
+      // to once DOMContentLoaded fires - by which point the browser has
+      // already painted the Water tab, so launching onto the Habits tab
+      // flashed Water and then jumped. Setting it up front removes the flash.
+      (function () {
+        try {
+          var tab = localStorage.getItem('active_tab');
+          if (tab && tab !== 'water' && /^[a-z]+$/.test(tab)) {
+            document.body.setAttribute('data-initial-tab', tab);
+          }
+        } catch (e) {
+          // Storage unavailable - the normal init path will sort it out.
+        }
+      })();
+    </script>
+
+    <!-- App Wrapper -->
+    <div class="app-wrapper">
+      <!-- Main Header -->
+      <header class="main-header">
+        <!-- Bell Icon for Reminders (Left Side) -->
+        <button id="reminders-bell-icon" class="icon-btn header-bell" aria-label="Reminders & Notifications">
+          <i class="material-icons-round">notifications</i>
+        </button>
+        
+        <h1>Daily Tracker</h1>
+        
+        <button id="more-options-toggle" class="icon-btn" aria-label="More options">
+          <i class="material-icons-round">more_vert</i>
+        </button>
+      </header>
+      
+      <!-- Global Tab Navigation -->
+      <nav class="tabs">
+        <button id="water-tab-btn" class="tab-btn active" data-app="water">
+          <i class="material-icons-round">water_drop</i>
+          <span>Water</span>
+        </button>
+        <button id="protein-tab-btn" class="tab-btn" data-app="protein">
+          <i class="material-icons-round">restaurant</i>
+          <span>Protein</span>
+        </button>        
+        <button id="workout-tab-btn" class="tab-btn" data-app="workout">
+          <i class="material-icons-round">fitness_center</i>
+          <span>Workout</span>
+        </button>
+        <button id="habits-tab-btn" class="tab-btn" data-app="habits">
+          <i class="material-icons-round">check_circle</i>
+          <span>Habits</span>
+        </button>
+      </nav>
+
+      <!-- Water Tracker App -->
+      <section id="water-app" class="app-container water-app active">
+        <div class="card main-card">
+          <div class="card-header">
+            <button class="icon-btn" id="water-history-toggle" aria-label="History">
+              <i class="material-icons-round">history</i>
+            </button>
+            <h2>Water Intake</h2>
+            <button class="icon-btn" id="water-settings-toggle" aria-label="Settings">
+              <i class="material-icons-round">settings</i>
+            </button>
+          </div>
+          
+          <!-- Goal Visual -->
+          <div class="goal-visual">
+            <div class="circular-progress" id="water-circular-progress">
+              <svg viewBox="0 0 100 100">
+                <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                <circle class="progress-bar" id="water-progress-circle" cx="50" cy="50" r="45"></circle>
+              </svg>
+              <div class="progress-content">
+                <span id="water-total">0</span>
+                <span class="unit">ml</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="progress-text">
+            <p>Daily Goal: <span id="water-goal-display">0</span> ml</p>
+            <p>Remaining: <span id="water-remaining">0</span> ml</p>
+          </div>
+          
+          <!-- Quick Add Buttons -->
+          <div class="quick-add">
+            <button class="action-btn water" data-action="water-add" data-amount="50">
+              +50ml
+            </button>
+            <button class="action-btn water" data-action="water-add" data-amount="100">
+              +100ml
+            </button>
+            <button class="action-btn water" data-action="water-add" data-amount="250">
+              +250ml
+            </button>
+            <button class="action-btn water" data-action="water-add" data-amount="500">
+              +500ml
+            </button>
+          </div>
+          
+          <!-- Custom Add -->
+          <div class="custom-add">
+            <input type="number" id="water-manual" placeholder="Custom amount" min="0" />
+            <button id="water-add-manual" class="action-btn water">Add</button>
+          </div>
+          
+          <button id="water-reset-daily" class="reset-btn">
+            <i class="material-icons-round">refresh</i> Reset Today
+          </button>
+        </div>
+
+        <!-- Water Settings Panel -->
+        <div class="panel settings-panel" id="water-settings-section">
+          <div class="panel-header">
+            <h3>Water Settings</h3>
+            <button class="close-panel icon-btn" aria-label="Close">
+              <i class="material-icons-round">close</i>
+            </button>
+          </div>
+          
+          <div class="form-group">
+            <label for="water-goal">Daily Goal (ml)</label>
+            <input type="number" id="water-goal" placeholder="Enter goal in ml" min="0" />
+          </div>
+
+          <div class="btn-group">
+            <button id="water-set-goal" class="action-btn water">Save Goal</button>
+          </div>
+
+          <!-- NEW: Notification Buttons Section -->
+          <div class="notification-buttons-section">
+            <button class="notification-button" id="water-goal-reminder-btn" data-type="goal">
+              <i class="material-icons-round">notifications</i>
+              <span>Goal Reminder</span>
+              <div class="button-status" id="water-goal-status">OFF</div>
+            </button>
+            <button class="notification-button" id="water-interval-reminder-btn" data-type="interval">
+              <i class="material-icons-round">schedule</i>
+              <span>Interval Reminder</span>
+              <div class="button-status" id="water-interval-status">OFF</div>
+            </button>
+            <button class="notification-button more-options" id="water-more-options-btn">
+              <i class="material-icons-round">tune</i>
+              <span>More Options</span>
+            </button>
+          </div>
+          
+          <div class="btn-group">
+            <button id="water-reset-data" class="danger-btn">
+              <i class="material-icons-round">delete</i> Reset All Data
+            </button>
+          </div>
+        </div>
+
+        <!-- Water History Panel -->
+        <div class="panel history-panel" id="water-history-popup">
+          <div class="panel-header">
+            <h3>Water History</h3>
+            <button class="close-panel icon-btn" aria-label="Close">
+              <i class="material-icons-round">close</i>
+            </button>
+          </div>
+          
+          <div class="tabs-inner">
+            <button class="tab-button active" data-tab="water-daily-history">
+              Daily Summary
+            </button>
+            <button class="tab-button" data-tab="water-analytics">
+              Analytics
+            </button>
+          </div>
+
+          <div class="tab-content" id="water-daily-history"></div>
+          <div class="tab-content" id="water-analytics">
+            <div class="intake-analytics">
+              <div class="intake-analytics-controls">
+                <div class="time-period-selector">
+                  <select id="water-chart-range" class="time-period-dropdown" aria-label="Graph range">
+                    <option value="7" selected>Last 7 days</option>
+                    <option value="30">Last 30 days</option>
+                  </select>
+                </div>
+              </div>
+              <div class="chart-summary" id="water-chart-summary"></div>
+              <div class="intake-chart" id="water-chart"></div>
+              <div class="intake-chart-labels" id="water-chart-labels"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Protein Tracker App -->
+      <section id="protein-app" class="app-container protein-app">
+        <div class="card main-card">
+          <div class="card-header">
+            <button class="icon-btn" id="protein-history-toggle" aria-label="History">
+              <i class="material-icons-round">history</i>
+            </button>
+            <h2>Protein Intake</h2>
+            <button class="icon-btn" id="protein-settings-toggle" aria-label="Settings">
+              <i class="material-icons-round">settings</i>
+            </button>
+          </div>
+          
+          <!-- Goal Visual -->
+          <div class="goal-visual">
+            <div class="circular-progress" id="protein-circular-progress">
+              <svg viewBox="0 0 100 100">
+                <circle class="progress-bg" cx="50" cy="50" r="45"></circle>
+                <circle class="progress-bar" id="protein-progress-circle" cx="50" cy="50" r="45"></circle>
+              </svg>
+              <div class="progress-content">
+                <span id="protein-total">0</span>
+                <span class="unit">g</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="progress-text">
+            <p>Daily Goal: <span id="protein-goal-display">0</span> g</p>
+            <p>Remaining: <span id="protein-remaining">0</span> g</p>
+          </div>
+          
+          <!-- Quick Add Buttons -->
+          <div class="quick-add">
+            <button class="action-btn protein" data-action="protein-add" data-amount="1">+1g</button>
+            <button class="action-btn protein" data-action="protein-add" data-amount="5">+5g</button>
+            <button class="action-btn protein" data-action="protein-add" data-amount="10">+10g</button>
+            <button class="action-btn protein" data-action="protein-add" data-amount="15">+15g</button>
+          </div>
+          
+          <!-- Custom Add -->
+          <div class="custom-add">
+            <input type="number" id="protein-manual" placeholder="Enter grams" min="0" />
+            <button id="protein-add-manual" class="action-btn protein">Add</button>
+          </div>
+          
+          <button id="protein-reset-daily" class="reset-btn">
+            <i class="material-icons-round">refresh</i> Reset Today
+          </button>
+        </div>
+
+        <!-- Protein Settings Panel -->
+        <div class="panel settings-panel" id="protein-settings-section">
+          <div class="panel-header">
+            <h3>Protein Settings</h3>
+            <button class="close-panel icon-btn" aria-label="Close">
+              <i class="material-icons-round">close</i>
+            </button>
+          </div>
+          
+          <div class="form-group">
+            <label for="protein-goal">Daily Goal (g)</label>
+            <input type="number" id="protein-goal" placeholder="Enter goal in grams" min="0" />
+          </div>
+          
+          <div class="btn-group">
+            <button id="protein-set-goal" class="action-btn protein">Save Goal</button>
+          </div>
+
+          <!-- NEW: Notification Buttons Section -->
+          <div class="notification-buttons-section">
+            <button class="notification-button" id="protein-goal-reminder-btn" data-type="goal">
+              <i class="material-icons-round">notifications</i>
+              <span>Goal Reminder</span>
+              <div class="button-status" id="protein-goal-status">OFF</div>
+            </button>
+            <button class="notification-button more-options" id="protein-more-options-btn">
+              <i class="material-icons-round">tune</i>
+              <span>More Options</span>
+            </button>
+          </div>
+          
+          <div class="btn-group">
+            <button id="protein-reset-data" class="danger-btn">
+              <i class="material-icons-round">delete</i> Reset All Data
+            </button>
+          </div>
+        </div>
+
+        <!-- Protein History Panel -->
+        <div class="panel history-panel" id="protein-history-popup">
+          <div class="panel-header">
+            <h3>Protein History</h3>
+            <button class="close-panel icon-btn" aria-label="Close">
+              <i class="material-icons-round">close</i>
+            </button>
+          </div>
+          
+          <div class="tabs-inner">
+            <button class="tab-button active" data-tab="protein-daily-history">
+              Daily Summary
+            </button>
+            <button class="tab-button" data-tab="protein-analytics">
+              Analytics
+            </button>
+          </div>
+
+          <div class="tab-content" id="protein-daily-history"></div>
+          <div class="tab-content" id="protein-analytics">
+            <div class="intake-analytics">
+              <div class="intake-analytics-controls">
+                <div class="time-period-selector">
+                  <select id="protein-chart-range" class="time-period-dropdown" aria-label="Graph range">
+                    <option value="7" selected>Last 7 days</option>
+                    <option value="30">Last 30 days</option>
+                  </select>
+                </div>
+              </div>
+              <div class="chart-summary" id="protein-chart-summary"></div>
+              <div class="intake-chart" id="protein-chart"></div>
+              <div class="intake-chart-labels" id="protein-chart-labels"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Workout Tracker App -->
+      <section id="workout-app" class="app-container workout-app">
+        <div class="card main-card">
+          <div class="card-header">
+            <button class="icon-btn" id="workout-history-toggle" aria-label="History">
+              <i class="material-icons-round">history</i>
+            </button>
+            <h2>Workout Tracker</h2>
+            <button class="icon-btn" id="workout-settings-toggle" aria-label="Settings">
+              <i class="material-icons-round">settings</i>
+            </button>
+          </div>
+          
+          <!-- Workout Tabs Container -->
+          <div class="workout-tabs-container" id="workout-tabs-container">
+            <!-- Workout tabs will be dynamically generated here -->
+          </div>
+          
+          <div class="workout-status">
+            <p>Tap a workout to mark it as complete. Complete all workouts to reset.</p>
+          </div>
+          
+          <!-- Manage Workouts Button -->
+          <button id="workout-manage-button" class="action-btn workout" style="margin-bottom: var(--spacing-md);">
+            <i class="material-icons-round">edit</i> Manage Workouts
+          </button>
+          
+          <button id="workout-reset-daily" class="reset-btn">
+            <i class="material-icons-round">refresh</i> Reset Today
+          </button>
+        </div>
+
+        <!-- Workout Settings Panel -->
+        <div class="panel settings-panel" id="workout-settings-section">
+          <div class="panel-header">
+            <h3>Workout Settings</h3>
+            <button class="close-panel icon-btn" aria-label="Close">
+              <i class="material-icons-round">close</i>
+            </button>
+          </div>
+          
+          <div class="setting-toggle-row">
+            <div class="setting-toggle-text">
+              <label for="workout-autoreset-toggle">Auto-reset when all done</label>
+              <small>Off: tap again to log a repeat and show a count badge</small>
+            </div>
+            <label class="reminder-toggle-switch">
+              <input type="checkbox" id="workout-autoreset-toggle" checked>
+              <span class="reminder-toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="btn-group vertical">
+            <button id="workout-reset-tabs" class="action-btn workout">
+              <i class="material-icons-round">refresh</i> Reset Tabs Only
+            </button>
+
+            <button id="workout-reset-data" class="danger-btn">
+              <i class="material-icons-round">delete</i> Reset All Data
+            </button>
+          </div>
+        </div>
+
+       <!-- Workout History Panel -->
+<div class="panel history-panel" id="workout-history-popup">
+  <div class="panel-header">
+    <h3>Workout History</h3>
+    <button class="close-panel icon-btn" aria-label="Close">
+      <i class="material-icons-round">close</i>
+    </button>
+  </div>
+  
+  <div class="tabs-inner">
+    <button class="tab-button active" data-tab="workout-daily-history">
+      Daily Summary
+    </button>
+    <button class="tab-button" data-tab="workout-analytics">
+      Workout Analytics
+    </button>
+  </div>
+  
+  <div class="tab-content active" id="workout-daily-history">
+    <!-- Lives here, above the filter, rather than in Settings: backdating
+         and fixing past days both happen while looking at the history. -->
+    <button id="workout-missed-button" class="action-btn workout workout-missed-button">
+      <i class="material-icons-round">event_available</i> Add Missed Workout
+    </button>
+    <!-- Filter and day list, rebuilt by WorkoutTracker.showDailyHistory() -->
+    <div id="workout-daily-history-list"></div>
+  </div>
+  <div class="tab-content" id="workout-analytics">
+    <div class="workout-analytics-container">
+      <!-- Workout selection dropdown -->
+      <div class="workout-view-selector">
+        <select id="workout-view-type" class="time-period-dropdown">
+          <option value="all" selected>All Workouts</option>
+          <option value="comparison">All Comparison</option>
+          <!-- Individual workout options will be added dynamically -->
+        </select>
+      </div>
+      
+      <!-- Graph Section -->
+      <div class="workout-section">
+        <div class="workout-section-title">
+          <span>Graph</span>
+          <div class="time-period-selector">
+            <select id="workout-time-period" class="time-period-dropdown">
+              <option value="weekly" selected>Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="halfyearly">Half Yearly</option>
+               <option value="yearly">Yearly</option>
+             </select>
+          </div>
+        </div>
+        <div class="chart-summary" id="workout-chart-summary"></div>
+        <div class="workout-chart-container">
+          <div class="workout-chart" id="workout-chart">
+            <!-- Drawn by chartUtils.renderLineChart(), axis labels included -->
+          </div>
+          <div class="workout-chart-labels" id="workout-chart-labels">
+            <!-- Labels will be dynamically rendered here -->
+          </div>
+          <!-- What one bar is; set with the graph (chartUtils.BUCKETS) -->
+          <p class="chart-axis-caption" id="workout-chart-caption"></p>
+        </div>
+      </div>
+
+      <!-- History Section - month calendar (core/calendar.js), as in habits -->
+      <div class="workout-section">
+        <div class="workout-section-title">
+          <span>History</span>
+          <button class="icon-btn habits-small-button" id="workout-edit-calendar-button"
+                  aria-label="Edit history" title="Edit history">
+            <i class="material-icons-round">edit</i>
+          </button>
+        </div>
+        <div class="habits-calendar-container workout-calendar-container">
+          <div class="habits-calendar-scroll-content" id="workout-calendar-scroll-content">
+            <!-- Calendar months will be dynamically added here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Streaks Section -->
+      <div class="workout-section">
+        <div class="workout-section-title">Best streaks</div>
+        <div class="workout-streak-bars" id="workout-streaks">
+          <!-- Streaks will be dynamically rendered here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      </section>
+      
+      <!-- Habits Tracker App -->
+      <section id="habits-app" class="app-container habits-app">
+        <div id="habits-main-view">
+          <div class="card main-card">
+            <div class="card-header">
+              <button class="icon-btn" id="habits-add-button" aria-label="Add">
+                <i class="material-icons-round">add</i>
+              </button>
+              <h2>Habits Tracker</h2>
+              <button class="icon-btn" id="habits-rearrange-button" aria-label="Rearrange">
+                <i class="material-icons-round">reorder</i>
+              </button>
+            </div>
+            
+            <div class="date-selector" id="habits-date-selector">
+              <!-- Date navigation and dates will be dynamically added here -->
+            </div>
+            
+            <div id="habits-container">
+              <!-- Habits will be dynamically added here -->
+            </div>
+          </div>
+        </div>
+        
+        <div id="habits-detail-view">
+          <div class="card main-card">
+            <div class="card-header">
+              <button class="icon-btn" id="habits-back-button" aria-label="Back">
+                <i class="material-icons-round">arrow_back</i>
+              </button>
+              <h2 id="habit-detail-title">Habit Name</h2>
+              <div class="habits-detail-buttons">
+                <button class="icon-btn" id="habits-delete-button" aria-label="Delete">
+                  <i class="material-icons-round">delete</i>
+                </button>
+                <button class="icon-btn" id="habits-edit-button" aria-label="Edit">
+                  <i class="material-icons-round">edit</i>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Graph Section -->
+            <div class="habits-section">
+              <div class="habits-section-title">
+                <span>Graph</span>
+                <div class="time-period-selector">
+                  <select id="graph-time-period" class="time-period-dropdown">
+                    <option value="weekly" selected>Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="halfyearly">Half Yearly</option>
+                    <option value="yearly">Yearly</option>
+                  </select>
+                </div>
+              </div>
+              <div class="chart-summary" id="habits-chart-summary"></div>
+              <div class="habits-chart-container">
+                <div class="habits-chart" id="habit-chart">
+                  <!-- Drawn by chartUtils.renderLineChart(), axis labels included -->
+                </div>
+                <div class="habits-chart-labels" id="habits-chart-labels">
+                  <!-- Labels will be dynamically rendered here -->
+                </div>
+                <!-- What one bar is; set with the graph (chartUtils.BUCKETS) -->
+                <p class="chart-axis-caption" id="habits-chart-caption"></p>
+              </div>
+            </div>
+            
+            <!-- Calendar Section -->
+            <div class="habits-section">
+              <div class="habits-section-title">
+                <span>History</span>
+                <div class="habits-calendar-controls">
+                  <button class="icon-btn habits-small-button" id="habits-edit-calendar-button">
+                    <i class="material-icons-round">edit</i>
+                  </button>
+                </div>
+              </div>
+              <div class="habits-calendar-container">
+                <div class="habits-calendar-scroll-content" id="habits-calendar-scroll-content">
+                  <!-- Calendar months will be dynamically added here -->
+                </div>
+              </div>
+            </div>
+            
+            <!-- Streaks Section -->
+            <div class="habits-section">
+              <div class="habits-section-title">Best streaks</div>
+              <div class="habits-streak-bars" id="habit-streaks">
+                <!-- Streaks will be dynamically rendered here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Reminders Panel Container -->
+      <div class="reminders-panel" id="reminders-panel">
+        <!-- Content will be dynamically generated by RemindersManager -->
+      </div>
+      
+      <!-- Data Options Panel -->
+      <div class="panel slide-panel" id="more-options-panel">
+        <div class="panel-header">
+          <h3>Options</h3>
+          <button class="close-panel icon-btn" aria-label="Close">
+            <i class="material-icons-round">close</i>
+          </button>
+        </div>
+        
+        <div class="btn-group vertical">
+          <button id="export-data-json" class="action-btn neutral">
+            <i class="material-icons-round">backup</i> Backup (JSON)
+          </button>
+
+          <button id="export-data" class="action-btn neutral">
+            <i class="material-icons-round">file_download</i> Export as CSV
+          </button>
+
+          <input type="file" id="import-file" accept=".json,.csv" />
+          <label for="import-file" class="action-btn neutral import-btn">
+            <i class="material-icons-round">file_upload</i> Restore / Import
+          </label>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Add Habit Modal -->
+    <div id="add-habit-modal" class="modal" style="display: none;">
+      <div class="modal-backdrop">
+        <div class="modal-content">
+          <div class="modal-header" id="modal-title">Add New Habit</div>
+          
+          <input type="text" id="habit-name-input" class="modal-input" placeholder="Enter habit name">
+          
+          <div class="habits-color-options">
+            <!-- Row 1 -->
+            <div class="habits-color-option red" data-color="red"></div>
+            <div class="habits-color-option coral" data-color="coral"></div>
+            <div class="habits-color-option pink" data-color="pink"></div>
+            <div class="habits-color-option lightpink" data-color="lightpink"></div>
+            <div class="habits-color-option purple" data-color="purple"></div>
+            
+            <!-- Row 2 -->
+            <div class="habits-color-option navy" data-color="navy"></div>
+            <div class="habits-color-option skyblue" data-color="skyblue"></div>
+            <div class="habits-color-option royalblue" data-color="royalblue"></div>
+            <div class="habits-color-option blue" data-color="blue"></div>
+            <div class="habits-color-option teal" data-color="teal"></div>
+            
+            <!-- Row 3 -->
+            <div class="habits-color-option lightblue" data-color="lightblue"></div>
+            <div class="habits-color-option lightgreen" data-color="lightgreen"></div>
+            <div class="habits-color-option green" data-color="green"></div>
+            <div class="habits-color-option darkgreen" data-color="darkgreen"></div>
+            <div class="habits-color-option seagreen" data-color="seagreen"></div>
+            
+            <!-- Row 4 -->
+            <div class="habits-color-option yellow" data-color="yellow"></div>
+            <div class="habits-color-option orange" data-color="orange"></div>
+            <div class="habits-color-option tangerine" data-color="tangerine"></div>
+            <div class="habits-color-option darkorange" data-color="darkorange"></div>
+            <div class="habits-color-option gray" data-color="gray"></div>
+            
+            <!-- Default white color -->
+            <div class="habits-color-option default selected" data-color="default"></div>
+          </div>
+          
+          <div class="modal-buttons">
+            <button class="modal-button cancel" id="habits-cancel-button">Cancel</button>
+            <button class="modal-button confirm" id="habits-confirm-button">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workout Management Modal -->
+    <div id="workout-manage-modal" class="modal" style="display: none;">
+      <div class="modal-backdrop">
+        <div class="modal-content">
+          <div class="modal-header">Manage Workouts</div>
+          
+          <!-- Add New Workout Section -->
+          <div style="margin-bottom: var(--spacing-lg);">
+            <h4 style="margin-bottom: var(--spacing-sm); color: var(--text-primary);">Add New Workout</h4>
+            <input type="text" id="new-workout-input" class="modal-input" placeholder="Enter workout name">
+            <button class="action-btn workout" id="add-workout-btn" style="width: 100%; margin-bottom: var(--spacing-md);">
+              <i class="material-icons-round">add</i> Add Workout
+            </button>
+          </div>
+          
+          <!-- Existing Workouts Section -->
+          <div style="margin-bottom: var(--spacing-lg);">
+            <h4 style="margin-bottom: var(--spacing-sm); color: var(--text-primary);">Current Workouts</h4>
+            <div id="workout-list" style="max-height: 200px; overflow-y: auto;">
+              <!-- Current workouts will be listed here -->
+            </div>
+          </div>
+          
+          <div class="modal-buttons">
+            <button class="modal-button cancel" id="workout-manage-cancel">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Add Missed Workout Modal -->
+    <div id="workout-missed-modal" class="modal" style="display: none;">
+      <div class="modal-backdrop">
+        <div class="modal-content">
+          <!-- "Edit Workouts" when opened from the History calendar -->
+          <div class="modal-header" id="missed-workout-title">Add Missed Workout</div>
+
+          <div class="form-group">
+            <label for="missed-workout-date">Date</label>
+            <input type="date" id="missed-workout-date" class="modal-input" />
+          </div>
+
+          <div class="form-group">
+            <label for="missed-workout-type">Workout</label>
+            <select id="missed-workout-type" class="modal-input"></select>
+          </div>
+
+          <button class="action-btn workout" id="missed-workout-add" style="width: 100%;">
+            <i class="material-icons-round">add</i> Add To This Day
+          </button>
+
+          <div class="missed-workout-day">
+            <h4 id="missed-workout-day-title">Already logged</h4>
+            <div id="missed-workout-existing"></div>
+          </div>
+
+          <div class="modal-buttons">
+            <button class="modal-button cancel" id="missed-workout-close">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Day Modal - opened by the pencil buttons in the water, protein
+         and workout history. Rows are filled in by dayEditor (core/ui.js). -->
+    <div id="edit-day-modal" class="modal" style="display: none;">
+      <div class="modal-backdrop">
+        <div class="modal-content">
+          <div class="modal-header" id="edit-day-title">Edit</div>
+          <div id="edit-day-rows" class="edit-day-rows"></div>
+          <p id="edit-day-summary" class="edit-day-summary"></p>
+          <p id="edit-day-error" class="edit-day-error" role="alert"></p>
+          <div class="modal-buttons">
+            <button class="modal-button cancel" id="edit-day-cancel">Cancel</button>
+            <button class="modal-button confirm" id="edit-day-save">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shared Confirmation Modal -->
+    <div id="confirm-modal" class="modal" style="display: none;">
+      <div class="modal-backdrop">
+        <div class="modal-content">
+          <div class="modal-header" id="confirm-modal-title">Are you sure?</div>
+          <p id="confirm-modal-message" style="margin-bottom: var(--spacing-lg);"></p>
+          <div class="modal-buttons">
+            <button class="modal-button cancel" id="confirm-modal-cancel">Cancel</button>
+            <button class="modal-button confirm" id="confirm-modal-ok">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toasts Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="core/core-scripts.js"></script>
+    <script src="core/ui.js"></script>
+    <script src="core/chart.js"></script>
+    <script src="core/calendar.js"></script>
+    <script src="trackers/trackers-scripts.js"></script>
+    <script src="workouts/workouts-scripts.js"></script>
+    <script src="habits/habits-scripts.js"></script>
+    <script src="reminders/reminders-scripts.js"></script>
+  </body>
+</html>

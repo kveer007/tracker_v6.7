@@ -1,0 +1,941 @@
+/* Workout Tracker Styles - Complete Clean Final File */
+
+/* Tab active state */
+.tab-btn.active[data-app="workout"] {
+  background: var(--workout-primary);
+  color: white;
+}
+
+/* Tab button style */
+.action-btn.workout {
+  background: var(--workout-primary);
+}
+
+.action-btn.workout:hover {
+  background: var(--workout-dark);
+}
+
+/* Focus styles for workout tab */
+.workout-app button:focus-visible,
+.workout-app input:focus-visible {
+  outline-color: var(--workout-primary);
+}
+
+/* Active tab color for workout */
+.workout-app .tab-button.active {
+  color: var(--workout-primary);
+}
+
+/* Make workout tabs larger */
+.workout-app .workout-tab {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.workout-app .workout-tab .material-icons-round {
+  margin-right: var(--spacing-md);
+  font-size: 1.5rem;
+}
+
+.workout-app .workout-tab.completed {
+  background: rgba(76, 175, 80, 0.1);
+  border-color: var(--workout-primary);
+}
+
+.workout-app .workout-tab.completed .material-icons-round {
+  color: var(--workout-primary);
+}
+
+/* Main workout tabs container */
+.workout-app .workout-tabs-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin: var(--spacing-lg) 0;
+}
+
+/* Count badge */
+.workout-app .count-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--workout-primary);
+  color: white;
+  border-radius: var(--radius-full);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Workout status text */
+.workout-app .workout-status {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+  font-size: 1.1rem;
+}
+
+/* Workout Analytics Container - Fixed Layout */
+.workout-analytics-container {
+  padding: var(--spacing-md) var(--spacing-sm);
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Workout view selector - Fixed Alignment */
+.workout-view-selector {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Dropdown arrow for workout view selector */
+.workout-view-selector::after {
+  content: '▼';
+  font-size: 10px;
+  color: var(--text-secondary);
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Section styling - Fixed Layout */
+.workout-section {
+  margin: 0 var(--spacing-sm) var(--spacing-md) var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  width: auto;
+  box-sizing: border-box;
+}
+
+/* Section title - Perfect alignment for all screen sizes */
+.workout-section-title {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 0 0 8px 0;
+  margin: 0 0 12px 0;
+  color: var(--workout-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: nowrap !important;
+  gap: var(--spacing-sm);
+}
+
+/* Ensure Graph title doesn't shrink */
+.workout-section-title > span {
+  flex-shrink: 0 !important;
+  white-space: nowrap;
+}
+
+/* Time period selector - perfect positioning */
+.workout-section-title .time-period-selector {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0 !important;
+  width: auto !important;
+  max-width: 150px;
+}
+
+/* General time period selector (fallback) */
+.time-period-selector {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown arrows */
+.workout-section-title .time-period-selector::after,
+.time-period-selector::after {
+  content: '▼';
+  font-size: 10px;
+  color: var(--text-secondary);
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Dropdown styling - with proper overrides */
+.workout-section-title select.time-period-dropdown {
+  background-color: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-sm);
+  padding: 6px 28px 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 90px;
+  max-width: 120px;
+  height: 32px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+  box-sizing: border-box;
+  width: auto !important;
+}
+
+/* General dropdown styling */
+select.time-period-dropdown {
+  background-color: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-sm);
+  padding: 6px 28px 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 110px;
+  max-width: 150px;
+  height: 32px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+  box-sizing: border-box;
+}
+
+/* Focus and hover states for dropdowns */
+select.time-period-dropdown:focus,
+select.time-period-dropdown:hover {
+  border-color: var(--workout-primary);
+  background-color: rgba(76, 175, 80, 0.05);
+}
+
+/* Chart styling - Fixed Overflow */
+.workout-chart-container {
+  background-color: var(--card-bg);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  overflow: visible;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Chart - Fixed Display */
+.workout-chart {
+  height: 180px;
+  position: relative;
+  margin: var(--spacing-md) 0;
+  padding-bottom: var(--spacing-sm);
+  width: 100%;
+  overflow: visible;
+}
+
+/* Chart labels - Fixed Overflow */
+.workout-chart-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: var(--spacing-sm);
+  padding-left: 30px;
+  padding-right: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Chart points */
+.workout-chart-point {
+  width: 8px;
+  height: 8px;
+  background-color: var(--workout-primary);
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Chart legend - Fixed Layout */
+.workout-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 15px;
+  padding-left: 30px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.workout-legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.workout-color-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 4px;
+  display: inline-block;
+}
+
+/* Streak styling - Fixed Layout */
+.workout-streak-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  background-color: var(--card-bg);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.workout-streak-date {
+  width: 100px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.workout-streak-visual {
+  flex: 1;
+  margin: 0 var(--spacing-md);
+  height: 30px;
+  background-color: var(--workout-primary);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+/* History calendar.
+   The month strip (core/calendar.js) uses the habits calendar's markup and
+   styles from habits-styles.css; only the workout-specific touches are here.
+   A filled-in day's colour is set inline - the selected workout's graph
+   colour, or green for All. Months fill the strip (habits-styles.css), so
+   they fit the narrower history panel without a size of their own. */
+.workout-calendar-container .habits-load-more-button {
+  background-color: var(--workout-primary);
+}
+
+.workout-calendar-container .habits-load-more-button:hover {
+  background-color: var(--workout-dark);
+}
+
+#workout-edit-calendar-button {
+  color: var(--text-primary);
+}
+
+/* Add Missed Workout, at the top of the Daily Summary tab. */
+.workout-missed-button {
+  width: 100%;
+  height: 44px;
+  font-size: 1rem;
+  margin-bottom: var(--spacing-md);
+}
+
+/* The Auto-reset switch in Workout Settings is workout green. It borrows the
+   reminders switch, whose "on" colour is reminders orange. */
+#workout-settings-section .reminder-toggle-switch input:checked + .reminder-toggle-slider {
+  background-color: var(--workout-primary);
+  border-color: var(--workout-dark);
+}
+
+#workout-edit-calendar-button.active {
+  background-color: var(--workout-primary);
+  color: white;
+}
+
+/* Animation for chart rendering */
+@keyframes fadeInChart {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.workout-chart svg {
+  animation: fadeInChart 0.5s ease-out;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.workout-chart-point {
+  animation: fadeInChart 0.5s ease-out;
+}
+
+/* Workout Management Modal Styles */
+#workout-manage-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#workout-manage-modal.active {
+  display: flex;
+}
+
+#workout-manage-modal .modal-content {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Modal header */
+#workout-manage-modal .modal-header {
+  display: flex;
+  /* Centred, like every other window's title. */
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+#workout-manage-modal .modal-header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.3rem;
+}
+
+#workout-manage-modal .close-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+#workout-manage-modal .close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+/* Add workout section */
+.add-workout-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.workout-input-group {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+#new-workout-input {
+  flex: 1;
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+#new-workout-input:focus {
+  outline: none;
+  border-color: var(--workout-primary);
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+#add-workout-btn {
+  padding: var(--spacing-md);
+  background: var(--workout-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-weight: 600;
+}
+
+#add-workout-btn:hover {
+  background: var(--workout-dark);
+  transform: translateY(-1px);
+}
+
+#add-workout-btn:disabled {
+  background: var(--border-color);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Workout list */
+.workout-list-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+#workout-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.workout-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.workout-list-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(2px);
+}
+
+.workout-list-item .workout-name {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.workout-list-item .delete-btn {
+  background: #F44336;
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.workout-list-item .delete-btn:hover {
+  background: #D32F2F;
+  transform: scale(1.05);
+}
+
+.workout-list-item .delete-btn .material-icons-round {
+  font-size: 16px;
+}
+
+/* Empty state styling */
+#workout-list p {
+  margin: 0;
+  text-align: center;
+  padding: var(--spacing-md);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Manage button styling */
+#workout-manage-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+#workout-manage-button .material-icons-round {
+  font-size: 1.2rem;
+}
+
+/* Modal buttons styling */
+#workout-manage-modal .modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+#workout-manage-modal .modal-button {
+  flex: 1;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  height: 50px;
+  transition: all var(--transition-fast);
+  border: none;
+  cursor: pointer;
+}
+
+#workout-manage-modal .modal-button.cancel {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+#workout-manage-modal .modal-button.cancel:hover {
+  background-color: #555;
+}
+
+/* Section headers in modal */
+#workout-manage-modal h4 {
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-xs);
+}
+
+/* Additional styles for when no workouts exist */
+.workout-tabs-container .empty-workouts {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-secondary);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  margin: var(--spacing-md) 0;
+}
+
+.workout-tabs-container .empty-workouts p {
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.workout-tabs-container .empty-workouts p:first-child {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.workout-tabs-container .empty-workouts p:last-child {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+/* Improved workout tab spacing when list is dynamic */
+.workout-tab {
+  margin-bottom: var(--spacing-sm);
+}
+
+.workout-tab:last-child {
+  margin-bottom: 0;
+}
+
+/* Smooth animations for dynamic content */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.workout-tab {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.workout-list-item {
+  animation: slideInUp 0.2s ease-out;
+}
+
+/* Enhanced focus styles for accessibility */
+#workout-manage-button:focus-visible,
+.workout-list-item .delete-btn:focus-visible,
+#add-workout-btn:focus-visible {
+  outline: 2px solid var(--workout-primary);
+  outline-offset: 2px;
+}
+
+/* Loading state styles */
+.workout-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-lg);
+  color: var(--text-secondary);
+}
+
+.workout-loading::after {
+  content: '⏳';
+  margin-left: var(--spacing-sm);
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Workout Filter Styles */
+#workout-type-filter {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23999999' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 12px;
+  padding-right: 32px;
+  min-width: 150px;
+}
+
+#workout-type-filter:focus {
+  outline: none;
+  border-color: #999999;
+  box-shadow: 0 0 0 2px rgba(153, 153, 153, 0.2);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23999999' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+}
+
+#workout-type-filter:hover {
+  border-color: rgba(153, 153, 153, 0.7);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23999999' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+}
+
+/* Override any existing dropdown arrow styles */
+select#workout-type-filter {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23999999' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+}
+
+/* RESPONSIVE BREAKPOINTS */
+
+/* Tablet and medium screens */
+@media (max-width: 768px) {
+  .workout-analytics-container {
+    padding: var(--spacing-sm);
+  }
+  
+  .workout-chart-container {
+    padding: var(--spacing-sm);
+  }
+  
+  .workout-chart {
+    height: 150px;
+  }
+  
+  .workout-section {
+    margin: 0 var(--spacing-xs) var(--spacing-md) var(--spacing-xs);
+  }
+  
+  /* Mobile responsive fixes for section title */
+  .workout-section-title {
+    font-size: 16px !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+  }
+
+  .workout-section-title .time-period-selector {
+    width: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  .workout-section-title select.time-period-dropdown {
+    min-width: 80px !important;
+    max-width: 100px !important;
+    font-size: 12px !important;
+    padding: 4px 20px 4px 8px !important;
+    width: auto !important;
+  }
+  
+  .workout-streak-date {
+    width: 80px;
+    font-size: 12px;
+  }
+  
+  .workout-legend-item {
+    font-size: 10px;
+  }
+  
+  #workout-type-filter {
+    min-width: 120px;
+    font-size: 0.85rem;
+  }
+
+  /* Responsive adjustments for workout management */
+  #workout-manage-modal .modal-content {
+    width: 95%;
+    padding: var(--spacing-md);
+  }
+  
+  #workout-manage-modal h4 {
+    font-size: 0.9rem;
+  }
+  
+  .workout-list-item {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .workout-list-item .delete-btn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .workout-list-item .delete-btn .material-icons-round {
+    font-size: 14px;
+  }
+}
+
+/* Small mobile screens */
+@media (max-width: 480px) {
+  .workout-analytics-container {
+    padding: var(--spacing-xs);
+  }
+  
+  .workout-chart-container {
+    padding: var(--spacing-xs);
+  }
+  
+  /* Same height as the habit graph on phones; 120px squashed the line. */
+  .workout-chart {
+    height: 150px;
+  }
+  
+  .workout-section {
+    margin: 0 0 var(--spacing-md) 0;
+  }
+  
+  /* Maintain horizontal layout on small screens */
+  .workout-section-title {
+    font-size: 16px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+  }
+
+  .workout-section-title .time-period-selector {
+    width: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  .workout-section-title select.time-period-dropdown {
+    min-width: 70px !important;
+    max-width: 90px !important;
+    font-size: 12px !important;
+    padding: 4px 18px 4px 6px !important;
+    width: auto !important;
+  }
+  
+  .workout-streak-visual {
+    font-size: 12px;
+  }
+
+  /* Only the workout view dropdown ("All Workouts") goes full width. These
+     used to be bare .time-period-selector / select.time-period-dropdown,
+     which also stretched the habits graph's period dropdown and the water/
+     protein range dropdown across the screen, jammed against their labels. */
+  .workout-view-selector {
+    width: 100%;
+  }
+
+  .workout-view-selector select.time-period-dropdown {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .workout-chart-labels {
+    font-size: 10px;
+    padding-left: 25px;
+    padding-right: 5px;
+  }
+  
+  .workout-chart-legend {
+    padding-left: 25px;
+  }
+  
+  #workout-type-filter {
+    min-width: 100px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    padding-right: 28px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  /* Force horizontal even on smallest screens */
+  .workout-section-title {
+    font-size: 14px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 4px !important;
+  }
+
+  .workout-section-title .time-period-selector {
+    width: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  .workout-section-title select.time-period-dropdown {
+    min-width: 60px !important;
+    max-width: 80px !important;
+    font-size: 11px !important;
+    padding: 3px 16px 3px 5px !important;
+    width: auto !important;
+  }
+  
+  /* Same height as the habit graph on phones; 120px squashed the line. */
+  .workout-chart {
+    height: 150px;
+  }
+  
+  .workout-streak-visual {
+    font-size: 12px;
+  }
+
+  /* Workout view dropdown only - see the 480px block. */
+  .workout-view-selector {
+    width: 100%;
+  }
+
+  .workout-view-selector select.time-period-dropdown {
+    width: 100%;
+    min-width: 0;
+  }
+}
