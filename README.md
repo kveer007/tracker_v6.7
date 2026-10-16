@@ -93,7 +93,7 @@ it is opened with an internet connection.
 2. Tap **Share** (square with an arrow) → **Add to Home Screen** → **Add**.
 
 The home-screen icon comes from `<link rel="apple-touch-icon"
-href="icons/icon-192.png?v=7">`, the page's only icon link. A letter on a
+href="icons/icon-192.png?v=8">`, the page's only icon link. A letter on a
 grey tile instead of the picture means the iPhone could not download the
 icon and is remembering that failure (see *Icons and addresses* below).
 
@@ -121,7 +121,7 @@ count as one app, and Android would refuse to install a second one as
 
 ### Icons and addresses
 
-- The icon and manifest addresses end in a version number, `?v=7`: in
+- The icon and manifest addresses end in a version number, `?v=8`: in
   `index.html` (the `apple-touch-icon` and `manifest` links) and in every
   icon `src` in `manifest.json`. A phone remembers an icon download that
   failed - for example when the address was opened while GitHub Pages was
